@@ -12,9 +12,13 @@
 const app = require("express")();
 const { mapRoutes } = require("./util/mapRoutes");
 const { orders } = require("./routes/orders");
-const bodyParser = require("body-parser");
-const { db } = require("./database/db");
-app.use(bodyParser());
+const fs = require("fs");
+
+// setup: need a uploads dir, create if not exists
+const dir = "./uploads";
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
 // Takes the given route structure and applies it to the api server
 mapRoutes(app, {
