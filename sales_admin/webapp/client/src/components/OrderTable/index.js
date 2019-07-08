@@ -32,7 +32,7 @@ export const ORDER_COLS = [
   },
   {
     title: "Merchant Name",
-    sorter: (a, b) => strSort(a.product.erchant.name, b.product.merchant.name),
+    sorter: (a, b) => strSort(a.product.merchant.name, b.product.merchant.name),
     dataIndex: "product.merchant.name"
   },
   {
