@@ -1,29 +1,30 @@
-#Sales Admin
+# Sales Admin
 
 ![Image of Sales Admin](sales.png)
 
-## system requirements
+## System Requirements
 
 ```
 node v12.4.0+
 npm 6.9.0+
 ```
 
-## installation
+## Installation
 
 ```
 npm install
 ```
 
-## running
+## Running
 
 2 ports are needed to run this example, 3000 and 4000. Once started navigate to http://localhost:3000.
+The application is accessed on 3000, and the express server is proxied at 4000.
 
 ```
 npm run start
 ```
 
-## technology
+## Technology
 
 This example leverages:
 
@@ -32,9 +33,9 @@ This example leverages:
 - ExpressJS/NodeJS as the api server (server dir)
 - LokiJS as the persistent data storage
 
-## structure
+## Structure
 
-### client
+### Client
 
 The web application (client) is built using the "create-react-app" toolkit.
 This toolkit handles the transpile and build aspects of react application development.
@@ -54,14 +55,14 @@ Other frameworks like Material UI could be of use, but due to time constraints A
 Typescript is not used in this demo due to time constraints, but I highly recommend looking at using
 Typescript with React for easier code documentation and compile-time bug catching.
 
-### server
+### Server
 
 The server is built using Nodejs, ExpressJS, and LokiJS.
 NodeJS and ExpressJS are commonly used web server tools which I was familiar with prior to this demo.
 I chose to use LokiJS for its in-memory database aspects and persistance to file. I wanted a
 minimal setup overhead for deployment, and LokiJS requires nothing more than NPM to setup.
 
-### database
+### Database
 
 LokiJS is a NoSQL database, so data is stored in document collections. There are 4 collections:
 
@@ -75,7 +76,7 @@ LokiJS is a NoSQL database, so data is stored in document collections. There are
 For simple setup purposes LokiJS is usefull, but to scale this application I would move to non in-memory database,
 and if relational requirements arise move to a SQL based database like MySQL or PostgreSQL.
 
-### api
+### Api
 
 The webapp(port 3000) proxies all its api requets to the server(port 4000)
 The following API endpoints are made available in this demo:
