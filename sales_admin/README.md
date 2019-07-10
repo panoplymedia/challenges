@@ -18,7 +18,7 @@ _Ideally you shouldn't spend more than 4-5 hours on your solution, but take as m
 
 ## Delivery requirements
 
-Please provide instructions for installing and running your application, including all dependencies. The simpler, the better.
+Please provide instructions for installing and running your application, including all dependencies. The simpler, the better, but we do use PostgreSQL if you want use that as a data store.
 
 Think about things like:
 
