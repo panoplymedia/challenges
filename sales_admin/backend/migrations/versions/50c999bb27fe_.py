@@ -7,6 +7,9 @@ Create Date: 2019-07-23 23:35:35.283782
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.sql import table, column, insert
+from sqlalchemy import String, orm
+from flask_bcrypt import Bcrypt
 
 
 # revision identifiers, used by Alembic.
@@ -39,6 +42,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['added_by'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    # Create default user admin/admin to easily get going
+    users = table('users', column('username', String), column('password', String))
+    bind = op.get_bind()
+    session = orm.Session(bind=bind)
+    data = {
+        "username": "admin",
+        "password": Bcrypt().generate_password_hash("admin").decode()
+    }
+    session.execute(insert(users).values(data))
+    session.commit()
     # ### end Alembic commands ###
 
 
