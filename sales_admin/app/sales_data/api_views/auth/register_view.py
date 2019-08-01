@@ -2,6 +2,7 @@ from flask.views import MethodView
 from flask import make_response, request, jsonify
 from app.sales_data.models.user import User
 from app.sales_data.utils.helper import verify_fields, server_error
+import json
 
 
 class RegistrationView(MethodView):
@@ -10,7 +11,7 @@ class RegistrationView(MethodView):
     def post(self):
         """Handle POST request for this view. Url ---> /auth/register"""
 
-        post_data = request.get_json()
+        post_data = json.loads(request.get_json().get("body"))
         verify_fields(["username", "password"], post_data)
 
         try:

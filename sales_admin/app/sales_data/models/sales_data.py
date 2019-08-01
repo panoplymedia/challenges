@@ -1,5 +1,6 @@
 from app.sales_data import db
 from .user import User
+from sqlalchemy import func
 
 
 class SalesData(db.Model):
@@ -38,6 +39,11 @@ class SalesData(db.Model):
     @staticmethod
     def get_total_revenue():
         """Calculate the total revenue"""
+        total_revenue = db.session.query(func.sum(SalesData.item_price * SalesData.quantity))
         return {
-
+            "total_revenue": str(round(total_revenue.scalar(), 2))
         }
+
+    @staticmethod
+    def calc_distance(num1, num2):
+        return num1*num2

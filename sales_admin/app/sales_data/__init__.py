@@ -2,6 +2,7 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from app.instance.config import app_config
 
@@ -12,6 +13,7 @@ db = SQLAlchemy()
 def create_app(config_name="development"):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
+    cors = CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "HEAD", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"], "expose_headers": "Authorization"}})
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",

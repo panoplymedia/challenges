@@ -3,6 +3,9 @@ from flask import request, abort, make_response, jsonify, g
 
 
 def get_user_id():
+    # Headers aren't passed in OPTIONS call
+    if request.method in ["OPTIONS"]:
+        return
     auth_header = request.headers.get('Authorization')
     access_token = auth_header.split(" ")[1]
 
