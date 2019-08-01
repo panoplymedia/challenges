@@ -5,7 +5,6 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
-instance/*.db
 instance/*.log
 dist/
 build/
