@@ -35,6 +35,7 @@ Yes, this challenge is copied from the LivingSocial code challenge. I helped put
 
 <br/>
 <br/>
+
 # Brian edits
 
 ## Run the code locally
