@@ -4,7 +4,7 @@
         <router-link to="/register">Register</router-link>
         <router-link to="/login">Login</router-link>
         <router-link to="/sales_data/upload">Upload</router-link>
-        <router-link to="/sales_data/sales_numbers">Get Sales</router-link>
+        <router-link to="/sales_data/sales_numbers">Total Revenue</router-link>
     </ul>
     <router-view/>
   </div>
