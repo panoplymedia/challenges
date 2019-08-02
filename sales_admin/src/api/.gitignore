@@ -1,4 +1,8 @@
 # build files
+api
+
+# env
+.env
 
 # Jetbrains
 .idea/

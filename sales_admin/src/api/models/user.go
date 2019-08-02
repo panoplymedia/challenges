@@ -1,15 +1,10 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-	"time"
-)
+import "github.com/jinzhu/gorm"
 
 type User struct {
 	gorm.Model
-	Username     string
-	PasswordHash string
-	Email        *string
-	Blocked      bool
-	DateBlocked  *time.Time
+	Email    string
+	Password string
+	Role     string
 }

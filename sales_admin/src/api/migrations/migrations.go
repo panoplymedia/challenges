@@ -16,7 +16,8 @@ import (
 
 func loadMigrations(migrationsDir string, log *logrus.Logger) source.Driver {
 	f := &file.File{}
-	s, err := f.Open("file://" + path.Join(os.Getenv("PROJECT_ROOT"), migrationsDir))
+	workDir, _ := os.Getwd()
+	s, err := f.Open("file://" + path.Join(workDir, migrationsDir))
 	if err != nil {
 		log.Fatalf("Error loading migrations %+v", err)
 	}
@@ -38,4 +39,17 @@ func Migrate(db *sql.DB, log *logrus.Logger) {
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 		log.Fatalf("Migrations: %+v", err)
 	}
+
+	if err := createAdminUser(db, log); err != nil {
+		log.Fatalf("Migrations: %+v", err)
+	}
+}
+
+func createAdminUser(db *sql.DB, log *logrus.Logger) error {
+	email := os.Getenv("ADMIN_USER")
+	pass := os.Getenv("ADMIN_PASS")
+	_, err := db.Exec(`insert into "user" (password, email, role)
+		values (crypt($1, gen_salt('bf', 8)), $2, 'admin') on conflict do nothing;`, pass, email)
+
+	return err
 }

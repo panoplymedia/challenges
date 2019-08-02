@@ -20,7 +20,6 @@ type Environment struct {
 	ApiPort              string
 	LogLevel             string
 	JwtSecret            string
-	ProjectRoot          string
 }
 
 func NewEnvironment() *Environment {
@@ -53,6 +52,5 @@ func NewEnvironment() *Environment {
 		DbMaxIdleConnections: os.Getenv("DB_MAX_IDLE_CONNECTIONS"),
 		DbMaxAttempts:        os.Getenv("DB_MAX_ATTEMPTS"),
 		JwtSecret:            os.Getenv("JWT_SECRET"),
-		ProjectRoot:          os.Getenv("PROJECT_ROOT"),
 	}
 }

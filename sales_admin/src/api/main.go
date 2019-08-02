@@ -9,27 +9,44 @@ import (
 	"net/http"
 	"os"
 	"sales-portal-api/database"
-	"sales-portal-api/endpoints/user"
+	"sales-portal-api/endpoints/customer"
+	"sales-portal-api/endpoints/merchant"
+	"sales-portal-api/endpoints/product"
+	"sales-portal-api/endpoints/sale"
 	"sales-portal-api/environment"
+	"sales-portal-api/migrations"
 	"time"
 )
 
+type jwtCustomClaims struct {
+	Email string `json:"email"`
+	Role  string `json:"role"`
+	jwt.StandardClaims
+}
+
 func login(e *database.DbEngine) func(echo.Context) error {
 	return func(c echo.Context) error {
-		username := c.FormValue("username")
+		email := c.FormValue("email")
 		password := c.FormValue("password")
 
 		// Verify User Exists
-		if ok := e.VerifyUser(username, password); !ok {
+		usr, ok := e.VerifyUser(email, password)
+		if !ok {
 			return echo.ErrUnauthorized
 		}
 
-		// Create token
-		token := jwt.New(jwt.SigningMethodHS256)
-
 		// Set claims
-		claims := token.Claims.(jwt.MapClaims)
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+		claims := &jwtCustomClaims{
+			email,
+			usr.Role,
+			jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+				Issuer:    "Acme Cult Hero Supplies Inc.",
+			},
+		}
+
+		// Create token using custom claims
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 		// Generate encoded token and send it as response.
 		t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
@@ -43,15 +60,17 @@ func login(e *database.DbEngine) func(echo.Context) error {
 	}
 }
 
-func accessible(c echo.Context) error {
-	return c.String(http.StatusOK, "Accessible")
-}
+func AuthorizeMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*jwtCustomClaims)
 
-func restricted(c echo.Context) error {
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
-	return c.String(http.StatusOK, "Welcome "+name+"!")
+		if claims.Issuer != "Acme Cult Hero Supplies Inc." {
+			c.Error(fmt.Errorf("unkown issuer %s", claims.Issuer))
+		}
+
+		return next(c)
+	}
 }
 
 func main() {
@@ -62,8 +81,20 @@ func main() {
 		logger.Panicln(err)
 	}
 
-	userSvc := user.NewSvc(engine)
-	userHandler := user.NewHandler(userSvc)
+	// Run migrations to ensure the db has the latest changes
+	migrations.Migrate(engine.DB.DB(), logger)
+
+	customerSvc := customer.NewSvc(engine)
+	customerHandler := customer.NewHandler(customerSvc)
+
+	merchantSvc := merchant.NewSvc(engine)
+	merchantHandler := merchant.NewHandler(merchantSvc)
+
+	productSvc := product.NewSvc(engine)
+	productHandler := product.NewHandler(productSvc)
+
+	saleSvc := sale.NewSvc(engine)
+	saleHandler := sale.NewHandler(saleSvc)
 
 	e := echo.New()
 
@@ -78,17 +109,43 @@ func main() {
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 
-	e.POST("/login", login)
+	// Login handler for authentication
+	e.POST("/login", login(engine))
 
 	// JWT Middleware
-	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+	jwtMiddleware := middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte(env.JwtSecret),
-	}))
+		Claims:     &jwtCustomClaims{},
+	})
 
-	e.POST("/users", userHandler.CreateUser)
-	e.GET("/users/:id", userHandler.GetUser)
-	e.PUT("/users/:id", userHandler.UpdateUser)
-	e.DELETE("/users/:id", userHandler.DeleteUser)
+	// sale endpoint handlers
+	e.POST("/sale", saleHandler.CreateSale, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/sale/:id", saleHandler.GetSale, jwtMiddleware, AuthorizeMiddleware)
+	e.PUT("/sale/:id", saleHandler.UpdateSale, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/sale", saleHandler.ListSales, jwtMiddleware, AuthorizeMiddleware)
+	e.DELETE("/sale/:id", saleHandler.DeleteSale, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/sale/summary", saleHandler.GetSalesSummary, jwtMiddleware, AuthorizeMiddleware)
+	e.POST("/sale/upload", saleHandler.UploadSalesCsv, jwtMiddleware, AuthorizeMiddleware)
+
+	// customer endpoint handlers
+	e.POST("/customer", customerHandler.CreateCustomer, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/customer/:id", customerHandler.GetCustomer, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/customer", customerHandler.ListCustomers, jwtMiddleware, AuthorizeMiddleware)
+	e.PUT("/customer/:id", customerHandler.UpdateCustomer, jwtMiddleware, AuthorizeMiddleware)
+	e.DELETE("/customer/:id", customerHandler.DeleteCustomer, jwtMiddleware, AuthorizeMiddleware)
+
+	// merchant endpoint handlers
+	e.POST("/merchant", merchantHandler.CreateMerchant, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/merchant/:id", merchantHandler.GetMerchant, jwtMiddleware, AuthorizeMiddleware)
+	e.PUT("/merchant/:id", merchantHandler.UpdateMerchant, jwtMiddleware, AuthorizeMiddleware)
+	e.DELETE("/merchant/:id", merchantHandler.DeleteMerchant, jwtMiddleware, AuthorizeMiddleware)
+
+	// product endpoint handlers
+	e.POST("/product", productHandler.CreateProduct, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/product", productHandler.ListProducts, jwtMiddleware, AuthorizeMiddleware)
+	e.GET("/product/:merchantId", productHandler.GetMerchantProducts, jwtMiddleware, AuthorizeMiddleware)
+	e.PUT("/product/:id", productHandler.UpdateProduct, jwtMiddleware, AuthorizeMiddleware)
+	e.DELETE("/product/:id", productHandler.DeleteProduct, jwtMiddleware, AuthorizeMiddleware)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", env.ApiPort)))
 }

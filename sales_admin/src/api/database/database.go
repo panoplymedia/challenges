@@ -18,7 +18,7 @@ type DbEngine struct {
 }
 
 func NewEngine(env *environment.Environment, logger *logrus.Logger) (*DbEngine, error) {
-	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
 		env.DbUser,
 		env.DbPass,
 		env.DbHost,
@@ -37,6 +37,9 @@ func NewEngine(env *environment.Environment, logger *logrus.Logger) (*DbEngine, 
 		db, err = gorm.Open("postgres", dbUrl)
 		if err != nil {
 			logger.Infoln(err)
+			time.Sleep(1 * time.Second)
+		} else {
+			break
 		}
 	}
 
@@ -55,33 +58,33 @@ func NewEngine(env *environment.Environment, logger *logrus.Logger) (*DbEngine, 
 	return engine, nil
 }
 
-func (e *DbEngine) VerifyUser(username, password string) bool {
+func (e *DbEngine) VerifyUser(email, password string) (*models.User, bool) {
 	usr := &models.User{}
 	err := e.DB.Model(models.User{}).
-		Where("username = $1", username).
+		Where("email = $1", email).
 		Find(usr).Error
 
 	if err != nil {
-		e.Logger.Debugln(err)
-		return false
+		e.Logger.Errorln(err)
+		return nil, false
+	}
+
+	if usr.Email == "" {
+		e.Logger.Errorln(fmt.Errorf("no user found with email %s", email))
 	}
 
 	row := e.DB.Model(models.User{}).
-		Select("password_hash").
-		Where("username = $1", username).
-		Where("password_hash=(crypt($2, $3))", password, usr.PasswordHash).
+		Select("password").
+		Where("email = $1", email).
+		Where("password=(crypt($2, $3))", password, usr.Password).
 		Row()
 
 	var hash string
 	err = row.Scan(&hash)
 	if err != nil {
 		e.Logger.Debugln(err)
-		return false
+		return nil, false
 	}
 
-	return hash == usr.PasswordHash
-}
-
-func(e *DbEngine) LoadCsvRecords(path string) error {
-
+	return usr, hash == usr.Password
 }
