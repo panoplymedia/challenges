@@ -36,6 +36,7 @@ export class ApiService {
             }),
             catchError(err => {
                 console.log(err);
+                localStorage.removeItem("currentToken");
                 return of(undefined);
             })
         );

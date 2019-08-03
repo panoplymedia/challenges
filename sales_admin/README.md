@@ -31,12 +31,14 @@ brew services start postgres
 Download and install the appropriate Go distribution for your environment [here](https://golang.org/)
 
 *Mac Users*
+
 You can install Go using `homebrew`. i.e. `brew install go`
 
 ### Install NodeJS
 Download and install the appropriate NodeJS distribution for your environment [here](https://nodejs.org/)
 
 *Mac Users*
+
 You can install NodeJS using `homebrew` and Node Version Manager `nvm`.
 ```bash
 # Install NVM
@@ -55,7 +57,9 @@ The Angular CLI can be installed using `npm`. i.e. `npm i -g @angular/cli`
 ### Environment Variables
 The `docker-compose.yml` file contains a set of existing environment variables that can be altered if you wish.
 
-**api**
+**backend**
+
+The backend expects to have the following variables defined prior to running the API:
 ```bash
 DB_USER: portal-admin           # Database user
 DB_PASS: password           # Database user's password
@@ -74,10 +78,11 @@ ADMIN_USER: cultleader22@thecult.com            # Admin user email that can be u
 ADMIN_PASS: Sup3r-Cult!st           # Admin user password that can be used for authentication. This user is automatically added by the API
 ```
 
-**ui**
-The ui expects to have an `environment.ts` file within `src/environments` for each environment being deployed to.
+**frontend**
 
-Currently the only variables that are expected are
+The frontend expects to have an `environment.ts` file within `src/environments` for each environment being deployed to.
+
+Currently the only variables that are expected:
 ```TypeScript
 export const environment = {
   production: false,    // [true/false]: A boolean flag that tells Angular that this is the production environment
@@ -86,6 +91,7 @@ export const environment = {
 ```
 
 **postgres**
+
 When starting a postgres cluster for the first time, you can specify a variety of environment variables that will tell postgres to automatically set certain things on init.
 
 ```bash
@@ -140,6 +146,7 @@ The above `_test` file will only run when given the additional build flag for `i
 This can be useful if you wish to have unit tests run before integration tests.
 
 **Authentication**
+
 The API uses JWT authentication with Bearer tokens.
  
 In order to authenticate, you must send a POST to `/login` with your user's email and password as form values.
@@ -169,3 +176,4 @@ The migrations will run after the API has started and has established a connecti
 
 The migration logic is stored in `sql` files within the `api/migrations` directory.
 Each migration step is prefixed based on its chronological step in the database's version history and is comprised of an `up` and `down` file.
+Depending on the available migration files in your deployed backend, the migrations will move either `up` or `down` as many versions as needed to match the latest migration in `api/migrations`.
