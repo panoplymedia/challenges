@@ -79,12 +79,29 @@ func (s *svc) LoadCsvRecords(reader *csv.Reader) error {
 		return err
 	}
 
+	// Clear previous data
+	if err := s.clearData(); err != nil {
+		return err
+	}
+
 	// Ignore header row
 	for _, record := range data[1:] {
 		if err := s.processRecord(record); err != nil {
 			return err
 		}
 	}
+	return nil
+}
+
+func (s *svc) clearData() error {
+	tables := []string{"customer", "merchant", "product", "sale"}
+
+	for _, table := range tables {
+		if err := s.db.DB.Exec(fmt.Sprintf(`delete from %s`, table)).Error; err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

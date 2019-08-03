@@ -15,8 +15,6 @@ type Environment struct {
 	DbMaxOpenConnections string
 	DbMaxIdleConnections string
 	DbMaxAttempts        string
-	AppPort              string
-	AppHost              string
 	ApiPort              string
 	LogLevel             string
 	JwtSecret            string
@@ -44,8 +42,6 @@ func NewEnvironment() *Environment {
 		DbName:               os.Getenv("DB_NAME"),
 		DbHost:               os.Getenv("DB_HOST"),
 		DbPort:               os.Getenv("DB_PORT"),
-		AppPort:              os.Getenv("APP_PORT"),
-		AppHost:              os.Getenv("APP_HOST"),
 		ApiPort:              os.Getenv("API_PORT"),
 		LogLevel:             os.Getenv("LOG_LEVEL"),
 		DbMaxLifetime:        os.Getenv("DB_MAX_LIFETIME"),

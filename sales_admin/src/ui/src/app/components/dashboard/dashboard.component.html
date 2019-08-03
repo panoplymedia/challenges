@@ -1,0 +1,16 @@
+<div fxLayout="column" style="padding:2%">
+    <mat-card>
+        <mat-card-header>
+            <div style="padding-bottom: 10px" fxLayout="row" fxFlex="30" fxLayoutAlign="space-around">
+                <mat-card-title>Sales Summary</mat-card-title>
+                <button mat-raised-button color="primary" (click)="openUploadDialog()">Upload CSV</button>
+            </div>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <div *ngIf="salesRevenue | async" style="padding:15px">
+                <h4>Total Sales Revenue: ${{salesRevenue | async}}</h4>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

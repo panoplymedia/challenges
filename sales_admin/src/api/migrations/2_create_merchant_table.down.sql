@@ -1,1 +1,1 @@
-DROP TABLE merchant;
+DROP TABLE IF EXISTS merchant;

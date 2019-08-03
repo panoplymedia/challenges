@@ -1,37 +1,48 @@
-version: '3'
+version: '3.7'
 services:
   db:
     image: postgres:11-alpine
-    restart: always
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "--db-name=portal", "--host=localhost", "--port=5432", "--username=portal-admin"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
     environment:
+      LC_ALL: C.UTF-8
       POSTGRES_PASSWORD: password
       POSTGRES_USER: portal-admin
       POSTGRES_DB: portal
   
   ui:
     build: ./src/ui
+    depends_on:
+      - api
     ports:
-      - "4200:4200"
+      - "4200:80"
   
   api:
     build: ./src/api
-    ports: 
+    depends_on:
+      - db
+    ports:
       - "9090:9090"
     environment:
       DB_USER: portal-admin
       DB_PASS: password
       DB_NAME: portal
-      DB_HOST: 127.0.0.1
+      DB_HOST: db
       DB_PORT: 5432
       DB_MAX_LIFETIME: 60
       DB_MAX_OPEN_CONNECTIONS: 50
       DB_MAX_IDLE_CONNECTIONS: 5
       DB_MAX_ATTEMPTS: 10
-      APP_PORT: 4200
-      APP_HOST: http://localhost
       API_PORT: 9090
       LOG_LEVEL: info
-      ACCESS_CONTROL_ALLOW_ORIGINS: http://localhost:4200
+      ACCESS_CONTROL_ALLOW_ORIGINS: "*"
       JWT_SECRET: ZPDDvgd2hnKJzV42cRUB7pmfpUxsXY
-      ADMIN_USER: xenu@scientology.com
-      ADMIN_PASSWORD: Sup3rKam!Xenu
+      ADMIN_USER: cultleader22@thecult.com
+      ADMIN_PASS: Sup3r-Cult!st

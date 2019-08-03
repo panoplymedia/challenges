@@ -1,0 +1,20 @@
+<div fxLayout="column" fxFlexFill>
+    <mat-toolbar color="primary">
+        <div fxLayout="row" fxFlexFill fxLayoutAlign="space-around center">
+            <div fxLayout="row">
+                <h1>Acme Cult Sales Portal</h1>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <mat-form-field style="padding-right: 10px">
+                    <input matInput placeholder="email" [(ngModel)]="email">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="password" type="password" [(ngModel)]="password">
+                </mat-form-field>
+                <button style="padding-left: 20px" mat-button (click)="login(email, password)">Login</button>
+                <mat-icon *ngIf="token | async" svgIcon="check" aria-hidden="false"></mat-icon>
+            </div>
+        </div>
+    </mat-toolbar>
+    <router-outlet> </router-outlet>
+</div>

@@ -40,7 +40,7 @@ func login(e *database.DbEngine) func(echo.Context) error {
 			email,
 			usr.Role,
 			jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+				ExpiresAt: time.Now().Add(time.Hour * 12).Unix(),
 				Issuer:    "Acme Cult Hero Supplies Inc.",
 			},
 		}

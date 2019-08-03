@@ -1,18 +1,25 @@
-FROM node:lts-alpine
+FROM node:lts-alpine AS builder
 
 RUN apk update
 
-RUN mkdir /app
+COPY package.json package-lock.json ./
 
-COPY ./tslint.json /app/
-COPY ./tsconfig.spec.json /app/
-COPY ./tsconfig.json /app/
-COPY ./tsconfig.app.json /app/
-COPY ./package.json /app/
-COPY ./package-lock.json /app/
-COPY ./karma.conf.js /app/
-COPY ./browserslist /app/
-COPY ./angular.json /app/
+RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
-COPY ./e2e /app/e2e
-COPY ./src /app/src
+RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
+
+WORKDIR /ng-app
+
+COPY . .
+
+RUN $(npm bin)/ng build --prod --build-optimizer
+
+FROM nginx:stable-alpine
+
+COPY nginx/default.conf /etc/nginx/conf.d/
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=builder /ng-app/dist/sales-portal/ /usr/share/nginx/html/
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
