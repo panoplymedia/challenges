@@ -58,7 +58,7 @@ func NewEngine(env *environment.Environment, logger *logrus.Logger) (*DbEngine, 
 	return engine, nil
 }
 
-func (e *DbEngine) VerifyUser(email, password string) (*models.User, bool) {
+func (e *DbEngine) VerifyUser(email, enteredPass string) (*models.User, bool) {
 	usr := &models.User{}
 	err := e.DB.Model(models.User{}).
 		Where("email = $1", email).
@@ -76,13 +76,12 @@ func (e *DbEngine) VerifyUser(email, password string) (*models.User, bool) {
 	row := e.DB.Model(models.User{}).
 		Select("password").
 		Where("email = $1", email).
-		Where("password=(crypt($2, $3))", password, usr.Password).
-		Row()
+		Where("password = crypt($2, $3)", enteredPass, usr.Password).Row()
 
 	var hash string
 	err = row.Scan(&hash)
 	if err != nil {
-		e.Logger.Debugln(err)
+		e.Logger.Println(err)
 		return nil, false
 	}
 

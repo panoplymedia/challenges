@@ -105,7 +105,7 @@ func main() {
 		Level: 5,
 	}))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{fmt.Sprintf("http://%s:%s", env.AppHost, env.AppPort)},
+		AllowOrigins: []string{env.AllowOrigins},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 
