@@ -1,0 +1,80 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to top left, #0b84b8, #C51162);
+  background-repeat: cover;
+  height: 100vh;
+  color: black;
+}
+
+.formContainer {
+  color: black;
+  border-radius: 8px 8px;
+  height: 40vh;
+  width: 25vw;
+  font-family: 'Roboto', sans-serif;
+  background: #ffffff;
+}
+
+.formContainer h1, h2, h3 {
+  padding: 2vh;
+  padding-top: 4vh;
+  margin-bottom: 0px;
+}
+
+.formPadding {
+  padding: 2vh;
+  padding-bottom: 0;
+}
+
+.form-control-file {
+  border: none;
+}
+
+.setInlineBlock {
+  display: inline-block !important;
+}
+
+.fileName {
+  padding-top: 1vh;
+}
+
+input {
+  margin-bottom: 1vh;
+  border-right: none;
+  border-top: none;
+  border-left: none;
+  background-color:transparent;
+  outline: none;
+  color: black;
+  caret-color: white;
+  padding-top: 2vh;
+}
+
+input[type=text]::placeholder {
+  text-align: center;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+}
+
+input[type=submit] {
+  background: rgba(255,255,255,.2);
+  width: 100%;
+  padding: 2vh;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px 4px;
+}
+
+.submitBtnContainer {
+  padding: 2vh;
+}
+
+.customBtn {
+  background-color: #bf1464;
+}
+
+.customBtn:hover {
+  background-color: #2276ae;
+}

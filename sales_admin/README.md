@@ -1,3 +1,8 @@
+## App Startup
+
+* cd into admin_app and run `npm i` to install all dependencies
+* run `npm start`
+
 # Sales Admin
 
 ## Background
