@@ -9,7 +9,7 @@ Your company just acquired Acme Cult Hero Supplies. They have been using a CSV w
 Using the web framework of your choice, deliver an application that meets the following requirements:
 
 * Provides an interface for a user to upload the salesdata.csv file in this directory
-* Parses and persists the information in the salesdata.csv file
+* Parses and persists the information in the salesdata.csv file to a database
 * Calculates and displays the total sales revenue to the user
 
 Bonus points if you add authentication.
