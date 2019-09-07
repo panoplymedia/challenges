@@ -10,6 +10,8 @@ class AcmeReportsController < ApplicationController
       acme_sales.each do |acme_sale|
         acme_sale.save!
       end
+
+      flash[:success] = 'Upload successful'
     else
       flash[:error] = 'Please select a file to upload'
     end

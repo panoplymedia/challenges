@@ -11,6 +11,7 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
     click_on 'Upload'
 
     assert_text total_revenue
+    assert_text 'Upload successful'
   end
 
   test "when a user fails to select a report, they see an error" do
