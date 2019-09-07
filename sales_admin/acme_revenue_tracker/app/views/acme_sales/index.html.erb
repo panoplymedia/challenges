@@ -1,0 +1,8 @@
+<%= @total_revenue.to_s %>
+
+<form action="/acme_reports" method="post">
+  <input type="file"
+         id="acme_sales_csv" name="acme_sales_csv"
+         accept="text/csv">
+  <input type="submit" value="Upload" />
+</form>
