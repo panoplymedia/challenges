@@ -1,0 +1,20 @@
+body {
+  font-family: 'Nanum Gothic', sans-serif;
+  padding: 0 1rem;
+}
+
+button, input, select, textarea {
+  font-family : inherit;
+  font-size   : 100%;
+}
+
+.page {
+  width: 80%;
+  max-width: 1000px;
+}
+
+.page-section {
+  margin: 1rem;
+  padding: 1rem;
+  border-bottom: solid 1px;
+}

@@ -1,6 +1,0 @@
-<%= @total_revenue.to_s %>
-
-<%= form_tag 'acme_reports', method: :post, multipart: true do %>
-  <%= file_field_tag 'acme_sales_csv' %>
-  <%= submit_tag 'Upload' %>
-<% end %>

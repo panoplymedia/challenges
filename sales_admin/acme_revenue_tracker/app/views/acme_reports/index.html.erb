@@ -1,0 +1,15 @@
+<h1>Acme Revenue Tracker</h1>
+<div class="page">
+  <div class="page-section">
+    <h2>Total Revenue:</h2>
+    <%= @total_revenue.to_s %>
+  </div>
+
+  <div class="page-section">
+    <h2>Upload a new Acme Report:</h2>
+    <%= form_tag 'acme_reports', method: :post, multipart: true do %>
+      <%= file_field_tag 'acme_sales_csv' %>
+      <%= submit_tag 'Upload' %>
+    <% end %>
+  </div>
+</div>

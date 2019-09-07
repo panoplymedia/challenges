@@ -1,4 +1,8 @@
 class AcmeReportsController < ApplicationController
+  def index
+    @total_revenue = TotalRevenueCalculator.call(AcmeSale.all)
+  end
+
   def create
     acme_sales = AcmeReportParser.call(params['acme_sales_csv'].open)
 
