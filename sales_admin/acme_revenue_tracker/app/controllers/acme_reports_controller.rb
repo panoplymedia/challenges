@@ -4,10 +4,14 @@ class AcmeReportsController < ApplicationController
   end
 
   def create
-    acme_sales = AcmeReportParser.call(params['acme_sales_csv'].open)
+    if params['acme_sales_csv']
+      acme_sales = AcmeReportParser.call(params['acme_sales_csv'].open)
 
-    acme_sales.each do |acme_sale|
-      acme_sale.save!
+      acme_sales.each do |acme_sale|
+        acme_sale.save!
+      end
+    else
+      flash[:error] = 'Please select a file to upload'
     end
 
     redirect_to '/'

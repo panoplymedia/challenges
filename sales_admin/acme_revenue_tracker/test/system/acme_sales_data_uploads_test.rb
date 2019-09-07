@@ -1,7 +1,7 @@
 require "application_system_test_case"
 
 class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
-  test "uploading the acme sales data csv" do
+  test "when a user uploads a new Acme Report, the total revenue is displayed" do
     visit root_url
 
     total_revenue = 526.45 # calculated from example csv
@@ -11,5 +11,13 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
     click_on 'Upload'
 
     assert_text total_revenue
+  end
+
+  test "when a user fails to select a report, they see an error" do
+    visit root_url
+
+    click_on 'Upload'
+
+    assert_text 'Please select a file to upload'
   end
 end

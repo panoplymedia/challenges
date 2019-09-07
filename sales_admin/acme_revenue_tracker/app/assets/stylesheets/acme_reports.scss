@@ -18,3 +18,12 @@ button, input, select, textarea {
   padding: 1rem;
   border-bottom: solid 1px;
 }
+
+.alert {
+  margin: 1rem 0;
+  padding: .5rem;
+}
+
+.alert-error {
+  background: #FFBABA;
+}
