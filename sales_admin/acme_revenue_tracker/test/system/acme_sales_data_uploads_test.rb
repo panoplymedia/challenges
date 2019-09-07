@@ -7,9 +7,9 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
     total_revenue = 526.45 # calculated from example csv
     refute_text total_revenue
 
-    attach_file('acme_sales_csv', 'test/system/salesdata.csv')
+    attach_file('acme_sales_csv', 'test/fixtures/files/salesdata.csv')
     click_on 'Upload'
 
-    # assert_text total_revenue
+    assert_text total_revenue
   end
 end
