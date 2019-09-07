@@ -1,0 +1,2 @@
+class AcmeSale < ApplicationRecord
+end
