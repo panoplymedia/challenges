@@ -19,6 +19,6 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
 
     click_on 'Upload'
 
-    assert_text AcmeReportParser::DEFAULT_ERROR_MESSAGE
+    assert_text ParseAcmeReport::DEFAULT_ERROR_MESSAGE
   end
 end

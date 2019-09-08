@@ -1,11 +1,11 @@
-class TotalRevenueCalculatorTest < ActiveSupport::TestCase
+class CalculateRevenueTest < ActiveSupport::TestCase
   test "total revenue calculator sums multiple items" do
     acme_sales = [
           AcmeSale.new(item_price: 10, quantity: 1),
           AcmeSale.new(item_price: 10, quantity: 1)
       ]
 
-    calculated_revenue = TotalRevenueCalculator.call(acme_sales)
+    calculated_revenue = CalculateRevenue.call(acme_sales)
 
     assert(calculated_revenue.success?, 'Expected a successful response')
     assert_equal(20, calculated_revenue.result)
@@ -17,7 +17,7 @@ class TotalRevenueCalculatorTest < ActiveSupport::TestCase
         AcmeSale.new(item_price: 10, quantity: 3)
     ]
 
-    calculated_revenue = TotalRevenueCalculator.call(acme_sales)
+    calculated_revenue = CalculateRevenue.call(acme_sales)
 
     assert(calculated_revenue.success?, 'Expected a successful response')
     assert_equal(50, calculated_revenue.result)
