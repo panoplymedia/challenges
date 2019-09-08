@@ -19,6 +19,6 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
 
     click_on 'Upload'
 
-    assert_text 'Please select a file to upload'
+    assert_text AcmeReportParser::DEFAULT_ERROR_MESSAGE
   end
 end
