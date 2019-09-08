@@ -1,9 +1,9 @@
-class ParseAcmeReportTest < ActiveSupport::TestCase
+class ParseAcmeReportServiceTest < ActiveSupport::TestCase
   include ActionDispatch::TestProcess::FixtureFile
 
   test "acme report parser returns an AcmeSale list" do
     upload = fixture_file_upload "#{Rails.root}/test/fixtures/files/salesdata.csv"
-    parsed_upload = ParseAcmeReport.call(upload)
+    parsed_upload = ParseAcmeReportService.call(upload)
 
     expected_number_of_acme_sales = 5 # rows in example csv
 
@@ -22,9 +22,9 @@ class ParseAcmeReportTest < ActiveSupport::TestCase
   end
 
   test "acme report parser returns an error if file is missing" do
-    parsed_upload = ParseAcmeReport.call(nil)
+    parsed_upload = ParseAcmeReportService.call(nil)
 
     refute(parsed_upload.success?, 'Expected an unsuccessful response')
-    assert_equal(ParseAcmeReport::DEFAULT_ERROR_MESSAGE, parsed_upload.error_message)
+    assert_equal(ParseAcmeReportService::DEFAULT_ERROR_MESSAGE, parsed_upload.error_message)
   end
 end

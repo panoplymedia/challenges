@@ -1,4 +1,4 @@
-class CalculateRevenue
+class CalculateRevenueService
   def self.call(sales)
     revenue = 0
 

@@ -1,21 +1,16 @@
 class AcmeReportsController < ApplicationController
   def index
-    calculated_revenue = CalculateRevenue.call(AcmeSale.all)
+    calculated_revenue = CalculateRevenueService.call(AcmeSale.all)
     @total_revenue = calculated_revenue.result
   end
 
   def create
-    parsed_upload = ParseAcmeReport.call(params['acme_sales_csv'])
+    parsed_acme_report = ParseAcmeReportService.call(params['acme_sales_csv'])
 
-    if parsed_upload.success?
-      if !parsed_upload.result.save
-        flash[:error] = ParseAcmeReport::DEFAULT_ERROR_MESSAGE
-      else
-        flash[:success] = 'Upload successful'
-      end
-
+    if parsed_acme_report.success? && parsed_acme_report.result.save
+      flash[:success] = 'Upload successful'
     else
-      flash[:error] = parsed_upload.error_message
+      flash[:error] = parsed_acme_report.error_message || ParseAcmeReportService::DEFAULT_ERROR_MESSAGE
     end
 
     redirect_to '/'

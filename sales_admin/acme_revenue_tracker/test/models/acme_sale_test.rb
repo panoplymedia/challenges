@@ -15,8 +15,8 @@ class AcmeSaleTest < ActiveSupport::TestCase
 
   test "it is valid" do
     acme_report = AcmeReport.new
-    invalid_record = AcmeSale.new(item_price: 100, quantity: 1, acme_report: acme_report)
+    valid_record = AcmeSale.new(item_price: 100, quantity: 1, acme_report: acme_report)
 
-    assert(invalid_record.valid?, 'Expected record to be valid')
+    assert(valid_record.valid?, 'Expected record to be valid')
   end
 end

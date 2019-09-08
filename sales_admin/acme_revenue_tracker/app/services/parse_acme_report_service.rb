@@ -1,6 +1,6 @@
 require 'csv'
 
-class ParseAcmeReport
+class ParseAcmeReportService
   DEFAULT_ERROR_MESSAGE = 'Select a properly formatted CSV'
 
   def self.call(file)
