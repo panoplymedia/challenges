@@ -6,6 +6,6 @@ class TotalRevenueCalculator
       total_revenue += sale.item_price * sale.quantity
     end
 
-    total_revenue
+    OpenStruct.new(success?: true, result: total_revenue, error_message: nil)
   end
 end

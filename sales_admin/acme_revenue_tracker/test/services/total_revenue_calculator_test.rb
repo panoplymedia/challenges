@@ -5,9 +5,10 @@ class TotalRevenueCalculatorTest < ActiveSupport::TestCase
           AcmeSale.new(item_price: 10, quantity: 1)
       ]
 
-    result = TotalRevenueCalculator.call(acme_sales)
+    calculated_revenue = TotalRevenueCalculator.call(acme_sales)
 
-    assert_equal(20, result)
+    assert(calculated_revenue.success?, 'Expected a successful response')
+    assert_equal(20, calculated_revenue.result)
   end
 
   test "total revenue calculator multiplies price times quantity for each sale" do
@@ -16,8 +17,9 @@ class TotalRevenueCalculatorTest < ActiveSupport::TestCase
         AcmeSale.new(item_price: 10, quantity: 3)
     ]
 
-    result = TotalRevenueCalculator.call(acme_sales)
+    calculated_revenue = TotalRevenueCalculator.call(acme_sales)
 
-    assert_equal(50, result)
+    assert(calculated_revenue.success?, 'Expected a successful response')
+    assert_equal(50, calculated_revenue.result)
   end
 end

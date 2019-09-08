@@ -1,6 +1,7 @@
 class AcmeReportsController < ApplicationController
   def index
-    @total_revenue = TotalRevenueCalculator.call(AcmeSale.all)
+    calculated_revenue = TotalRevenueCalculator.call(AcmeSale.all)
+    @total_revenue = calculated_revenue.result
   end
 
   def create
