@@ -21,4 +21,13 @@ class AcmeSalesDataUploadsTest < ApplicationSystemTestCase
 
     assert_text ParseAcmeReport::DEFAULT_ERROR_MESSAGE
   end
+
+  test "when a user uploads a new Acme Report with invalid sales data, they see an error" do
+    visit root_url
+
+    attach_file('acme_sales_csv', 'test/fixtures/files/salesdata_with_missing_prices.csv')
+    click_on 'Upload'
+
+    assert_text ParseAcmeReport::DEFAULT_ERROR_MESSAGE
+  end
 end

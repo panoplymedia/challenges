@@ -8,11 +8,12 @@ class AcmeReportsController < ApplicationController
     parsed_upload = ParseAcmeReport.call(params['acme_sales_csv'])
 
     if parsed_upload.success?
-      parsed_upload.result.each do |acme_sale|
-        acme_sale.save!
+      if !parsed_upload.result.save
+        flash[:error] = ParseAcmeReport::DEFAULT_ERROR_MESSAGE
+      else
+        flash[:success] = 'Upload successful'
       end
 
-      flash[:success] = 'Upload successful'
     else
       flash[:error] = parsed_upload.error_message
     end
