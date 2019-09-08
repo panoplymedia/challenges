@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Setup:
 
-Things you may want to cover:
+This application was built using Ruby on Rails and Postgres. Versions are defined in the Gemfile. Follow these steps to run the application locally:
 
-* Ruby version
+1. Install Dependencies
+```
+bundle install
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+2. Setup the database
+```
+rails db:setup
+```
+3. Run tests
+```
+rails test:system test
+```
+4. Start server
+```
+rails s
+```
