@@ -1,18 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import DataPage from './components/DataPage'
 import Header from './components/Header'
 import Sales from './components/Sales'
 
+export default class App extends Component {
+  constructor() {
+		super();
+		this.state = {
+			csv: null
+		};
+  }
+  //Method that changes the state of the application to the submitted CSV file
+  handleCSV = (event) => {
+    this.setState({
+      csv: event.target.files[0]
+    })
+  }
 
-function App() {
-  return (
-    <div className="App">
-        <Header/>
-        <DataPage/>
-        <Sales/>
-    </div>
-  );
+  //Method that uploads file to backend, used axios here instead of fetch
+  handleFileUpload = () =>{
+    const data = new FormData() 
+    data.append('file', this.state.csv)
+
+    let options = {
+      method: 'POST',
+      body: data
+    }
+
+    fetch(`http://demo4275173.mockable.io/`, options)
+      .then(resp => resp.json())
+      .then(result => {
+        alert(result)
+    }) 
+  }
+  
+  render(){
+    return (
+      <div className="App">
+            <Header/>
+            <DataPage
+            handleCSV={this.handleCSV}
+            handleFileUpload={this.handleFileUpload}/>
+            <Sales/>
+      </div>
+    );
+  }
 }
 
-export default App;
