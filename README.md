@@ -3,17 +3,17 @@
 
 ---
 
-##Installing the Acme Cult CSV Uploader
+## Installing the Acme Cult CSV Uploader
 1. **Clone Challenge repo** Front End & Back End
 2. **Install**
 
 
-###Functionality
+### Functionality
 - Provides an interface for a user to upload the salesdata.csv file in this directory
 - Parses and persists the information in the salesdata.csv file to a database
 - Calculates and displays the total sales revenue to the user
 
-###Scaling Considerations
+### Scaling Considerations
 - Include pagination for larger CSV data sets
 - validations for only CSV files
 - models are created based on headers of csv not hard coded incase csv structure changes
