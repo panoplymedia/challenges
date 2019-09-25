@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Sale.destroy_all
+
+Sale.create(customer_name: "Marcus", item_description: "laptop", item_price: 3.00, quantity: 1, merchant_name: "megaphone", merchant_address: "134 lane")
