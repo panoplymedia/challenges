@@ -3,8 +3,6 @@ import { Input } from 'semantic-ui-react'
 import { Button } from 'semantic-ui-react'
 
 export default class DataPage extends Component {
-
-
     render(){
         return (
             <div className="csv-data">
