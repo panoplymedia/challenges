@@ -5,6 +5,7 @@
 
 ##Installing the Acme Cult CSV Uploader
 1. **Clone Challenge repo** Front End & Back End
+2. **Install**
 
 
 ###Functionality
