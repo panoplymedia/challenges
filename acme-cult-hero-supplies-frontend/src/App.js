@@ -28,7 +28,7 @@ export default class App extends Component {
       body: data
     }
 
-    fetch(`http://demo4275173.mockable.io/`, options)
+    fetch(`http://localhost:3000/csvs`, options)
       .then(resp => resp.json())
       .then(result => {
         alert(result)
