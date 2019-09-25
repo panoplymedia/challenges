@@ -9,7 +9,7 @@ export default class App extends Component {
 		super();
 		this.state = {
       csv: null,
-      salesData: {}
+      salesData: []
 		};
   }
 
@@ -45,8 +45,6 @@ export default class App extends Component {
     }) 
   }
 
-
-  
   render(){
     return (
       <div className="App">
@@ -54,7 +52,8 @@ export default class App extends Component {
             <DataPage
             handleCSV={this.handleCSV}
             handleFileUpload={this.handleFileUpload}/>
-            <Sales/>
+            <Sales
+            salesData={this.state.salesData}/>
       </div>
     );
   }
