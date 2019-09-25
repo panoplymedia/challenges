@@ -5,7 +5,6 @@ export default class Sales extends Component {
 
     showCellData = () => {
         const cellData = this.props.salesData
-        console.log( cellData)
         if(cellData.length > 0 ){
             return cellData.map( (cell, index) => {
                 return(
@@ -32,7 +31,20 @@ export default class Sales extends Component {
 			);
 		}
     }
-
+    
+  calculateTotal(){
+    const salesData = this.props.salesData
+    let totalSales = 0;
+    let saleAmount =0;
+    if(salesData.length > 0){
+      salesData.map( sale => {
+        saleAmount = sale.quantity * sale.item_price
+        totalSales += saleAmount
+        return totalSales
+      })
+    }
+    return totalSales
+  }
     render(){
         return (
             <div className="csv-data">
@@ -52,9 +64,10 @@ export default class Sales extends Component {
                         {this.showCellData()}
                     </Table.Body>
 
-                    <Table.Footer>
+                    <Table.Footer className="total">
                     <Table.Row>
                         <Table.HeaderCell colSpan='6'>
+                            Total Sales: ${this.calculateTotal() }
                         </Table.HeaderCell>
                     </Table.Row>
                     </Table.Footer>

@@ -1,22 +1,30 @@
 .App {
   text-align: center;
+  background: #FFEFBA;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
+.header {
   background-color: #282c34;
-  min-height: 100vh;
+  padding-top: 10px;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.csv-data{
+  margin-top: 10px;
 }
+.total{
+  text-align: right;
+  font-size: 1.5rem;
+  
+}
+
+
