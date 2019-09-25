@@ -8,9 +8,19 @@ export default class App extends Component {
   constructor() {
 		super();
 		this.state = {
-			csv: null
+      csv: null,
+      salesData: {}
 		};
   }
+
+  componentDidMount() {
+    console.log("in component did mount")
+    fetch('http://localhost:3000/api/v1/sales')
+      .then(data => data.json())
+      .then((data) => { this.setState({ salesData: data }) }); 
+  }
+
+
   //Method that changes the state of the application to the submitted CSV file
   handleCSV = (event) => {
     this.setState({
@@ -28,12 +38,14 @@ export default class App extends Component {
       body: data
     }
 
-    fetch(`http://localhost:3000/csvs`, options)
+    fetch(`http://localhost:3000/api/v1/csvs`, options)
       .then(resp => resp.json())
       .then(result => {
         alert(result)
     }) 
   }
+
+
   
   render(){
     return (
