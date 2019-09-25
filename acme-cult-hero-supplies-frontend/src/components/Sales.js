@@ -6,7 +6,7 @@ export default class Sales extends Component {
     showCellData = () => {
         const cellData = this.props.salesData
         console.log( cellData)
-        if(cellData !== undefined){
+        if(cellData.length > 0 ){
             return cellData.map( (cell, index) => {
                 return(
                     <Table.Row key={index}>
