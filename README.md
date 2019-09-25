@@ -1,4 +1,23 @@
+
 # Megaphone Code Challenges
 
-Hi, welcome to the Megaphone code challenges repo. We have the [Sales Admin](https://github.com/panoplymedia/challenges/tree/master/sales_admin) challenge to begin with, and hope to add others as time goes on.
+---
 
+##Installing the Acme Cult CSV Uploader
+1. **Clone Challenge repo** Front End & Back End
+
+
+###Functionality
+- Provides an interface for a user to upload the salesdata.csv file in this directory
+- Parses and persists the information in the salesdata.csv file to a database
+- Calculates and displays the total sales revenue to the user
+
+###Scaling Considerations
+- Include pagination for larger CSV data sets
+- validations for only CSV files
+- models are created based on headers of csv not hard coded incase csv structure changes
+- Depending on design requirement details may parse csv in frontend
+-  Use threads to parse larger CSV
+-  Utilize optimistic rendering for better UI performance
+
+---
