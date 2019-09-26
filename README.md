@@ -4,14 +4,14 @@
 
 ## Installing the Acme Cult CSV Uploader
 
-###Clone Challenge Repo
+### Clone Challenge Repo
 
-###CD into acme-cult-hero-supplies-frontend directory
+#### CD into acme-cult-hero-supplies-frontend directory
 - npm install
 - use command npm test to run tests
 - npm start
 
-###CD into acme-cult-hero-supplies-backend directory
+#### CD into acme-cult-hero-supplies-backend directory
 
 - bundle install
 - use command rspec to run tests
