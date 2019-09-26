@@ -28,11 +28,10 @@
 -  Utilize optimistic rendering for better UI performance
 
 ### Packages used
-####Back-end
+
 - [Faker][1]
 - [Factory_bot_rails][2]
 - [Database_cleaner][3]
-####Front-end
 - [Jest][4]
 
 ---
