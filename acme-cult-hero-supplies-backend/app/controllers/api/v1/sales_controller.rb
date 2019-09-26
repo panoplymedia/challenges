@@ -1,5 +1,7 @@
 class Api::V1::SalesController < ApplicationController
     def index
-        render json: Sale.all
+        response = Sale.all
+
+        render json: response, status: :ok
     end
 end
