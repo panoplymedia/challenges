@@ -67,7 +67,7 @@
 
 ### Retrieve Sales Revenue Total
 
-**URL** : `/sales/total`
+**URL** : `/sales`
 
 **Method** : `GET`
 
