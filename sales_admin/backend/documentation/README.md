@@ -17,7 +17,53 @@
 
 **Status Code** : `201 CREATED`
 
-**Body** : Response body will be empty.
+**Body** : Response body will contain a JSON object with the newly added sales data:
+
+```json
+[
+    {
+        "customer_name": "Jack Burton",
+        "item_description": "Premium Cowboy Boots",
+        "item_price": 149.99,
+        "quantity": 1,
+        "merchant_name": "Carpenter Outfitters",
+        "merchant_address": "99 Factory Drive"
+    },
+    {
+        "customer_name": "Ellen Ripley",
+        "item_description": "Tank Top Undershirt",
+        "item_price": 9.5,
+        "quantity": 2,
+        "merchant_name": "Hero Outlet",
+        "merchant_address": "123 Main Street"
+    },
+    {
+        "customer_name": "Lisbeth Salander",
+        "item_description": "Black Hoodie",
+        "item_price": 49.99,
+        "quantity": 4,
+        "merchant_name": "Stockholm Supplies",
+        "merchant_address": "34 Other Avenue"
+    },
+    {
+        "customer_name": "Butch Coolidge",
+        "item_description": "Tank Top Undershirt",
+        "item_price": 9.5,
+        "quantity": 3,
+        "merchant_name": "Hero Outlet",
+        "merchant_address": "123 Main Street"
+    },
+    {
+        "customer_name": "Ellen Ripley",
+        "item_description": "Stomper Shoes",
+        "item_price": 129,
+        "quantity": 1,
+        "merchant_name": "Parker Footwear",
+        "merchant_address": "77 Main Street"
+    }
+]
+```
+---
 
 ### Retrieve Sales Revenue Total
 
@@ -29,12 +75,51 @@
 
 **Status Code** : `200 OK`
 
-**Body** : Response body will contain a JSON object with a "total" property describing the sum of sales revenue from the data available:
+**Body** : Response body will contain a JSON object with the sales data available:
 
 ```json
-{
-	"total": 435.14
-}
+[
+    {
+        "customer_name": "Jack Burton",
+        "item_description": "Premium Cowboy Boots",
+        "item_price": 149.99,
+        "quantity": 1,
+        "merchant_name": "Carpenter Outfitters",
+        "merchant_address": "99 Factory Drive"
+    },
+    {
+        "customer_name": "Ellen Ripley",
+        "item_description": "Tank Top Undershirt",
+        "item_price": 9.5,
+        "quantity": 2,
+        "merchant_name": "Hero Outlet",
+        "merchant_address": "123 Main Street"
+    },
+    {
+        "customer_name": "Lisbeth Salander",
+        "item_description": "Black Hoodie",
+        "item_price": 49.99,
+        "quantity": 4,
+        "merchant_name": "Stockholm Supplies",
+        "merchant_address": "34 Other Avenue"
+    },
+    {
+        "customer_name": "Butch Coolidge",
+        "item_description": "Tank Top Undershirt",
+        "item_price": 9.5,
+        "quantity": 3,
+        "merchant_name": "Hero Outlet",
+        "merchant_address": "123 Main Street"
+    },
+    {
+        "customer_name": "Ellen Ripley",
+        "item_description": "Stomper Shoes",
+        "item_price": 129,
+        "quantity": 1,
+        "merchant_name": "Parker Footwear",
+        "merchant_address": "77 Main Street"
+    }
+]
 ```
 ---
 ## Error Responses
