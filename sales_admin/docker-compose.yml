@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  db:
+    image: postgres
+    environment: &db_env
+      POSTGRES_DB: sales_admin_db
+      POSTGRES_PASSWORD: sales_admin_password
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: sales_admin_user
+    # volumes:
+      # - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  backend:
+    image: sales_admin_backend
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+      <<: *db_env
+    ports:
+      - "8080:8080"
+  # frontend:
+  #   image: sales_admin_frontend
+  #   depends_on:
+  #     - db
+  #     - backend
+  #   ports:
+  #     - "8080:8080"
