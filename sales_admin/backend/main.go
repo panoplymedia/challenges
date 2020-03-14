@@ -4,17 +4,25 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
+
+	"github.com/gorilla/mux"
 
 	"github.com/clevengermatt/challenges/sales_admin/backend/db"
-	"github.com/gorilla/mux"
 )
 
 func main() {
-	startDatabase()
-	startAPI()
-}
 
-func startAPI() {
+	// give the database some time to start before trying to connect
+	time.Sleep(2 * time.Second)
+
+	// Creat the database table
+	err := db.CreateSaleTable()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// start listening for api requests
 	r := mux.NewRouter()
 	r.StrictSlash(true)
 
@@ -24,19 +32,7 @@ func startAPI() {
 	}
 
 	http.Handle("/", r)
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func startDatabase() {
-	err := db.CreateConnectionPool()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = db.CreateSaleTable()
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

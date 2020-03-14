@@ -21,8 +21,8 @@ var endpoints = []Endpoint{
 		Path:    "/sales/",
 	},
 	Endpoint{
-		Handler: handlers.GetSalesTotal,
+		Handler: handlers.GetSales,
 		Methods: []string{"GET"},
-		Path:    "/sales/total/",
+		Path:    "/sales/",
 	},
 }

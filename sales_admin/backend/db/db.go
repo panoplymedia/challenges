@@ -7,7 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	// "github.com/lib/pq" must be imported for the postgres driver
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
+	// _ "github.com/lib/pq"
 )
 
 var connectionPool *sqlx.DB
@@ -61,7 +62,7 @@ func CreateSaleTable() error {
 	}
 
 	_, err = conn.Exec(`CREATE TABLE IF NOT EXISTS sale (
-    custome_name TEXT NOT NULL,
+    customer_name TEXT NOT NULL,
     item_description TEXT NOT NULL,
     item_price DOUBLE PRECISION NOT NULL,
     quantity INTEGER NOT NULL,
@@ -72,5 +73,87 @@ func CreateSaleTable() error {
 		return err
 	}
 
+	return err
+}
+
+// GetSales returns all of the sales data from the database
+func GetSales() ([]Sale, error) {
+
+	conn, err := NewConnection()
+	if err != nil {
+		return nil, err
+	}
+
+	var sale []Sale
+
+	err = conn.Select(
+		&sale,
+		`SELECT
+		*
+		FROM
+		sale`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return sale, nil
+}
+
+// StoreSales stores the given sales to the database
+func StoreSales(sales []Sale) error {
+
+	conn, err := NewConnection()
+	if err != nil {
+		return err
+	}
+
+	// clear out the old data
+	_, err = conn.Exec("DELETE FROM sale")
+	if err != nil {
+		return err
+	}
+
+	txn, err := conn.Begin()
+	if err != nil {
+		return err
+	}
+
+	stmt, err := txn.Prepare(
+		pq.CopyIn("sale",
+			"customer_name",
+			"item_description",
+			"item_price",
+			"quantity",
+			"merchant_name",
+			"merchant_address"))
+	if err != nil {
+		return err
+	}
+
+	for _, sale := range sales {
+		_, err = stmt.Exec(
+			sale.CustomerName,
+			sale.ItemDescription,
+			sale.ItemPrice,
+			sale.Quantity,
+			sale.MerchantName,
+			sale.MerchantAddress)
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		return err
+	}
+
+	err = stmt.Close()
+	if err != nil {
+		return err
+	}
+
+	err = txn.Commit()
 	return err
 }
