@@ -7,23 +7,37 @@ services:
       POSTGRES_PASSWORD: sales_admin_password
       POSTGRES_PORT: 5432
       POSTGRES_USER: sales_admin_user
-    # volumes:
-      # - ./pgdata:/var/lib/postgresql/data
+    expose:
+      - 5432
     ports:
-      - "5432:5432"
+      - 5432:5432
   backend:
     image: sales_admin_backend
     depends_on:
       - db
+    build:
+        context: ./backend
+        dockerfile: Dockerfile
     environment:
       POSTGRES_HOST: db
       <<: *db_env
+    expose:
+      - 8000
     ports:
-      - "8080:8080"
-  # frontend:
-  #   image: sales_admin_frontend
-  #   depends_on:
-  #     - db
-  #     - backend
-  #   ports:
-  #     - "8080:8080"
+      - 8080:8080
+    links:
+      - db
+  frontend:
+    image: sales_admin_frontend
+    depends_on:
+      - db
+    build:
+        context: ./frontend
+        dockerfile: Dockerfile
+    ports:
+        - "3000:3000"
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+      - ./frontend/public:/usr/src/app/public
+    links:
+      - backend

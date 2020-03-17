@@ -37,9 +37,15 @@ Yes, this challenge is copied from the LivingSocial code challenge. I helped put
 
 ## Presentation of Work
 
+To run the application, run
+```
+docker-compose up --build -d
+```
+on a Docker enabled machine from the /sales_admin directory.
+
 ### Overview
 
-The application developed for this challenge is composed of 3 main parts; a PostgreSQL database, a backend server ([backend documentation](backend/documentation/README.md)), and a frontend server  ([frontend documentation](frontend/documentation/README.md)).
+The application developed for this challenge is composed of 3 main parts; a PostgreSQL database, a backend server ([backend documentation](backend/documentation/README.md)), and a frontend server.
 
 ### Running The Application
 
