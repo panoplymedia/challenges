@@ -55,11 +55,13 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		// app.POST("/upload", UploadHandler)
+		app.POST("/upload", UploadHandler)
+
 		app.Resource("/customers", CustomersResource{})
 		app.Resource("/merchants", MerchantsResource{})
 		app.Resource("/orders", OrdersResource{})
 		app.Resource("/products", ProductsResource{})
+
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

@@ -4,12 +4,17 @@
         <p class="lead text-center">Use the form to upload a file to the sales database</p>
     </div>
 
+    <div class="mx-auto" style="width:75%;">
     <%= form({action:"/upload", method:"POST", class:"input-group"}) { %>
-        <div class="custom-file p-3 mx-5">
-            <input type="file" class="custom-file-input" id="customFile">
+        <div class="custom-file p-3 mx-2">
+            <%= f.FileTag({name:"someFile", class:"custom-file-input", id:"customFile", aria-describedby:"submit-button"}) %>
             <label class="custom-file-label" for="customFile">Select a file to upload</label>
         </div>
+        <div>
+            <%= f.SubmitTag("Upload", {class:"btn text-light bg-dark mx-2", id:"submit-button"}) %>
+        </div>
     <% } %>
+    </div>
 </div>
 
 <div class="card w-75 text-center mx-auto">
