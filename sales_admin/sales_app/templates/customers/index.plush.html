@@ -1,0 +1,33 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Customers</h3>
+  <div class="float-right">
+    <%= linkTo(newCustomersPath(), {class: "btn btn-primary"}) { %>
+      Create New Customer
+    <% } %>
+  </div>
+</div>
+
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (customer) in customers { %>
+      <tr>
+        
+        <td>
+          <div class="float-right">
+            <%= linkTo(customerPath({ customer_id: customer.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editCustomerPath({ customer_id: customer.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(customerPath({ customer_id: customer.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

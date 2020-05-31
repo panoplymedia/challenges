@@ -1,0 +1,6 @@
+- id: "merchant.created.success"
+  translation: "Merchant was successfully created."
+- id: "merchant.updated.success"
+  translation: "Merchant was successfully updated."
+- id: "merchant.destroyed.success"
+  translation: "Merchant was successfully destroyed."

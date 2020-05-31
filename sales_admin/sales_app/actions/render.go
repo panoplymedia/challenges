@@ -1,8 +1,13 @@
 package actions
 
 import (
+	"strings"
+
+	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
@@ -19,10 +24,16 @@ func init() {
 
 		// Add template helpers here:
 		Helpers: render.Helpers{
-			// for non-bootstrap form helpers uncomment the lines
-			// below and import "github.com/gobuffalo/helpers/forms"
-			// forms.FormKey:     forms.Form,
 			// forms.FormForKey:  forms.FormFor,
+			forms.FormKey: forms.Form,
+			"activeClass": func(n string, help plush.HelperContext) string {
+				if p, ok := help.Value("current_route").(buffalo.RouteInfo); ok {
+					if strings.Contains(p.PathName, n) {
+						return "active"
+					}
+				}
+				return ""
+			},
 		},
 	})
 }

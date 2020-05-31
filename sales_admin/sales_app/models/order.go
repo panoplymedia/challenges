@@ -11,12 +11,15 @@ import (
 
 // Order is used by pop to map your orders database table to your go code.
 type Order struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
-	Customer  Customer  `json:"customer" db:"customer"`
-	Product   Product   `json:"product" db:"product"`
-	Merchant  Merchant  `json:"merchant" db:"merchant"`
+	ID         uuid.UUID `json:"id" db:"id"`
+	CreatedAt  time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at" db:"updated_at"`
+	Customer   Customer  `belongs_to:"customer"`
+	Product    Product   `belongs_to:"product"`
+	Merchant   Merchant  `belongs_to:"merchant"`
+	CustomerID uuid.UUID `json:"customer_id" db:"customer_id"`
+	ProductID  uuid.UUID `json:"product_id" db:"product_id"`
+	MerchantID uuid.UUID `json:"merchant_id" db:"merchant_id"`
 }
 
 // String is not required by pop and may be deleted

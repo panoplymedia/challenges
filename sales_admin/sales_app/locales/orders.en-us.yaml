@@ -1,0 +1,6 @@
+- id: "order.created.success"
+  translation: "Order was successfully created."
+- id: "order.updated.success"
+  translation: "Order was successfully updated."
+- id: "order.destroyed.success"
+  translation: "Order was successfully destroyed."

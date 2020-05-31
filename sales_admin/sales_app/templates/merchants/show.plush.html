@@ -1,0 +1,17 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Merchant Details</h3>
+
+  <div class="float-right">
+    <%= linkTo(merchantsPath(), {class: "btn btn-info"}) { %>
+      Back to all Merchants
+    <% } %>
+    <%= linkTo(editMerchantPath({ merchant_id: merchant.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(merchantPath({ merchant_id: merchant.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+</ul>

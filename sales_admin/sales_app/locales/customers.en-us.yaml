@@ -1,0 +1,6 @@
+- id: "customer.created.success"
+  translation: "Customer was successfully created."
+- id: "customer.updated.success"
+  translation: "Customer was successfully updated."
+- id: "customer.destroyed.success"
+  translation: "Customer was successfully destroyed."

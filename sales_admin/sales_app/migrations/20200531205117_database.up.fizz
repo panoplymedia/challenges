@@ -1,0 +1,32 @@
+create_table("customers") {
+	t.Column("id", "uuid", {primary: true})
+	t.Timestamps()
+	t.Column("name", "string", {})
+}
+
+create_table("merchants") {
+	t.Column("id", "uuid", {primary: true})
+	t.Timestamps()
+	t.Column("name", "string", {})
+	t.Column("address", "string", {})
+}
+
+create_table("products") {
+	t.Column("id", "uuid", {primary: true})
+	t.Timestamps()
+	t.Column("description", "string", {})
+	t.Column("price", "double precision", {})
+    t.Column("merchant_id", "uuid", {})
+	t.ForeignKey("merchant_id", {"merchants": ["id"]}, {})
+}
+
+create_table("orders") {
+	t.Column("id", "uuid", {primary: true})
+	t.Timestamps()
+    t.Column("merchant_id","uuid", {})
+    t.Column("customer_id","uuid", {})
+    t.Column("product_id","uuid", {})
+	t.ForeignKey("merchant_id", {"merchants": ["id"]}, {})
+	t.ForeignKey("customer_id", {"customers": ["id"]}, {})
+	t.ForeignKey("product_id", {"products": ["id"]}, {})
+}

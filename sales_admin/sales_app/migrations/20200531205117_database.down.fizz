@@ -1,0 +1,4 @@
+drop_table("orders")
+drop_table("products")
+drop_table("merchants")
+drop_table("customers")
