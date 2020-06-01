@@ -40,6 +40,9 @@ func init() {
 			"formatTime": func(t time.Time) string {
 				return t.Format("January 2, 2006")
 			},
+			"formatMoney": func(amt float64) string {
+				return fmt.Sprintf("$%6.2f", amt)
+			},
 		},
 	})
 }

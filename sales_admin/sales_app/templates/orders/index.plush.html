@@ -34,7 +34,7 @@
         <td><%= order.Product.Description %></td>
         <td><%= order.Merchant.Name %></td>
         <td><%= order.Merchant.Address %></td>
-        <td><%= order.Product.Price %></td>
+        <td><%= formatMoney(order.Product.Price) %></td>
         <td><%= order.Quantity %></td>
         <td><%= orderTotal(order.Product.Price, order.Quantity) %></td>
         <td>
