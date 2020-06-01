@@ -8,6 +8,25 @@
     <%= linkTo(editOrderPath({ order_id: order.ID }), {class: "btn btn-warning", body: "Edit"}) %>
     <%= linkTo(orderPath({ order_id: order.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
   </div>
+  <div class="card" style="width: 18rem;">
+  <div class="card-header">
+    Order ID: <%= order.ID %>
+  </div>
+  <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+          <strong>Quantity: </strong><%= order.Quantity %>
+      </li>
+      <li class="list-group-item">
+          <strong>Item Description: </strong><%= order.Product.Description %>
+      </li>
+      <li class="list-group-item">
+          <strong>Price: </strong><%= order.Product.Price %>
+      </li>
+      <li class="list-group-item">
+          <strong>Total: </strong><%= orderTotal(order.Product.Price, order.Quantity) %>
+      </li>
+  </ul>
+  </div>
 </div>
 
 

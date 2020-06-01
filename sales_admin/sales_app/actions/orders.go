@@ -66,7 +66,7 @@ func (v OrdersResource) Show(c buffalo.Context) error {
 	order := &models.Order{}
 
 	// To find the Order the parameter order_id is used.
-	if err := tx.Find(order, c.Param("order_id")); err != nil {
+	if err := tx.Eager().Find(order, c.Param("order_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 

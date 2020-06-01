@@ -18,15 +18,16 @@
 ![Sales App Dashboard](dashboard.png)
 
 ## Requirements
-- docker
+- docker ^17.05
 - docker-compose
 - open ports on 3000 and 5432
 
 ## To Run
 ```bash
-docker-compose up
+docker-compose up -d
 ```
-Once running, visit localhost:3000 on your browser
+Once running, visit localhost:3000 on your browser. (I reccommend incognito to
+avoid any cache issues)
 
 ## Stack
 - API: endpoints and templates built using GoBuffalo
@@ -70,10 +71,10 @@ I used Bootsrap 4 to style components in the two routes visible on the app's UI.
 
 ## Other Considerations and Improvements
 - Implement Unit testing
+- Stronger data validation for imports
 - Better UX on the upload button. Currently it returns an unhandled error if
   the button is pressed before selecting a file. The button should be inactive
   until that point, and flash messages should be used if unsupported filetypes
   are uploaded to the app
-- Add validation to objects upon import so that merchant, customer, and product
-  rows are not duplicated
 - Auth, with roles enabling object editing and deletion 
+- Cache middleware in the app to reduce db queries and improve response times
