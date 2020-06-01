@@ -59,7 +59,8 @@ CREATE TABLE public.orders (
     updated_at timestamp without time zone NOT NULL,
     merchant_id uuid NOT NULL,
     customer_id uuid NOT NULL,
-    product_id uuid NOT NULL
+    product_id uuid NOT NULL,
+    quantity integer NOT NULL
 );
 
 

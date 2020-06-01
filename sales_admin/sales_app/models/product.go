@@ -16,7 +16,8 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 	Description string    `json:"description" db:"description"`
 	Price       float64   `json:"price" db:"price"`
-	Merchant    Merchant  `belongs_to:"merchant" json:"merchant"`
+	Merchant    Merchant  `belongs_to:"merchant"`
+	MerchantID  uuid.UUID `json:"merchant_id" db:"merchant_id"`
 }
 
 // String is not required by pop and may be deleted

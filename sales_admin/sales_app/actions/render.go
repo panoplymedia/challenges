@@ -1,13 +1,13 @@
 package actions
 
 import (
-	"strings"
+	"fmt"
+	"time"
 
-	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/gobuffalo/plush"
+	"github.com/henry-jackson/challenges/sales_admin/sales_app/models"
 )
 
 var r *render.Engine
@@ -26,13 +26,19 @@ func init() {
 		Helpers: render.Helpers{
 			// forms.FormForKey:  forms.FormFor,
 			forms.FormKey: forms.Form,
-			"activeClass": func(n string, help plush.HelperContext) string {
-				if p, ok := help.Value("current_route").(buffalo.RouteInfo); ok {
-					if strings.Contains(p.PathName, n) {
-						return "active"
-					}
+			"orderTotal": func(price float64, qty int) string {
+				total := float64(qty) * price
+				return fmt.Sprintf("$%6.2f", total)
+			},
+			"totalRevenue": func(orders []models.Order) string {
+				sum := 0.00
+				for _, order := range orders {
+					sum += float64(order.Quantity) * order.Product.Price
 				}
-				return ""
+				return fmt.Sprintf("$%6.2f", sum)
+			},
+			"formatTime": func(t time.Time) string {
+				return t.Format("January 2, 2006")
 			},
 		},
 	})

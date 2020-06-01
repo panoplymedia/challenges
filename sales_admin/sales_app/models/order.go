@@ -16,6 +16,7 @@ type Order struct {
 	UpdatedAt  time.Time `json:"updated_at" db:"updated_at"`
 	Customer   Customer  `belongs_to:"customer"`
 	Product    Product   `belongs_to:"product"`
+	Quantity   int       `json:"quantity" db:"quantity"`
 	Merchant   Merchant  `belongs_to:"merchant"`
 	CustomerID uuid.UUID `json:"customer_id" db:"customer_id"`
 	ProductID  uuid.UUID `json:"product_id" db:"product_id"`

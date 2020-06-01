@@ -1,33 +1,60 @@
 # Sales Admin
 
-## Background
+![Sales App Home](home.png)
+![Sales App Dashboard](dashboard.png)
 
-Your company just acquired Acme Cult Hero Supplies. They have been using a CSV worksheet to track sales data, and you need to transform that into a web application to track revenue.
+## Requirements
+- docker
+- docker-compose
+- open ports on 3000 and 5432
 
-## Functional requirements
+## To Run
+```bash
+docker-compose up
+```
+Once running, visit localhost:3000 on your browser
 
-Using the web framework of your choice, deliver an application that meets the following requirements:
+## Stack
+- API: endpoints and templates built using GoBuffalo
+- DB: PostgreSQL
 
-* Provides an interface for a user to upload the salesdata.csv file in this directory
-* Parses and persists the information in the salesdata.csv file to a database
-* Calculates and displays the total sales revenue to the user
+## API
 
-Bonus points if you add authentication.
+#### Backend
+Uses the buffalo app as to route requests, with a pop.Connection middleware
+used to access the db. I chose buffalo for this challenge because it allows you
+to generate much of the repetitive boilerplate code in a basic API
 
-_Ideally you shouldn't spend more than 4-5 hours on your solution, but take as much time as you want._
+#### Frontend
+I used Bootsrap 4 to style components in the two routes visible on the app's UI. Plush templating was used to create the html
 
-## Delivery requirements
+## DB
+- PostgreSQL used as persistent storage
+- I used Pop to manage the database schema and migrations
+- Collections:
+    - Merchants
+    - Products
+        - products belong to one merchant
+    - Customers
+    - Orders
+        - orders have one merchant, customer, and product
 
-Please provide instructions for installing and running your application, including all dependencies. The simpler, the better, but we do use PostgreSQL if you want use that as a data store.
+## Scale Considerations
+- Total revenue calculation is a heavy burden on the database because it is
+  being calculated on the server using all rows in the orders table. A sql
+  query would be cleaner and faster
+- If this application would scale across geographic regions, adding additional
+  db nodes and having some sort of data replication among all database nodes
+  would improve query time and spread queries across nodes
+- As number of records increases, indexing the database would improve query
+  times
 
-Think about things like:
-
-* Testing
-* How to store the data
-* How would your solution differ if it had to scale?
-
-Please submit your solution as a pull request, or package it up and send it to doug.ramsay@megaphone.fm.
-
-## Credits
-
-Yes, this challenge is copied from the LivingSocial code challenge. I helped put that together, so hopefully nobody will mind that much.
+## Other Considerations and Improvements
+- Implement Unit testing
+- Better UX on the upload button. Currently it returns an unhandled error if
+  the button is pressed before selecting a file. The button should be inactive
+  until that point, and flash messages should be used if unsupported filetypes
+  are uploaded to the app
+- Add validation to objects upon import so that merchant, customer, and product
+  rows are not duplicated
+- Auth, with roles enabling object editing and deletion 

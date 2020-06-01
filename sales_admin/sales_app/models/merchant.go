@@ -15,7 +15,7 @@ type Merchant struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Name      string    `json:"name" db:"name"`
-	Address   string    `json:"address"`
+	Address   string    `json:"address" db:"address"`
 	Orders    Orders    `has_many:"orders" sort_by:"created_at asc" json:"orders"`
 	Products  Products  `has_many:"products" sort_by:"description asc" json:"products"`
 }
