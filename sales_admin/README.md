@@ -1,5 +1,19 @@
 # Sales Admin
 
+## Table Of Contents
+- [Requirements](#requirements)
+- [To Run](#to-run)
+- [Screenshots](#screenshots)
+- [Stack](#stack)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+    - [DB](#db)
+- [Endpoints](#endpoints)
+- [Scale Considerations](#scale-considerations)
+- [Other Considerations](#other-considerations-and-improvements)
+
+## Screenshots
+
 ![Sales App Home](home.png)
 ![Sales App Dashboard](dashboard.png)
 
@@ -17,8 +31,6 @@ Once running, visit localhost:3000 on your browser
 ## Stack
 - API: endpoints and templates built using GoBuffalo
 - DB: PostgreSQL
-
-## API
 
 #### Backend
 Uses the buffalo app as to route requests, with a pop.Connection middleware
@@ -38,6 +50,13 @@ I used Bootsrap 4 to style components in the two routes visible on the app's UI.
     - Customers
     - Orders
         - orders have one merchant, customer, and product
+
+## Endpoints
+| Service         | Endpoint | Method | Description                                  |
+|-----------------|----------|--------|----------------------------------------------|
+| Upload          | /upload  | POST   | Returns a 200 for successful import to db    |
+| Sales Dashboard | /orders  | GET    | Returns a list of all orders in the database |
+
 
 ## Scale Considerations
 - Total revenue calculation is a heavy burden on the database because it is
