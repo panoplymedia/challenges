@@ -20,10 +20,12 @@
 ## Requirements
 - docker ^17.05
 - docker-compose
+- dockerd (ensure the docker daemon is running on your machine)
 - open ports on 3000 and 5432
 
 ## To Run
 ```bash
+cd sales_app
 docker-compose up -d
 ```
 Once running, visit localhost:3000 on your browser. (I reccommend incognito to
