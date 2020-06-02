@@ -1,0 +1,101 @@
+{
+  "RSpec": {
+    "coverage": {
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/user.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/application_record.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/helpers/application_helper.rb": {
+        "lines": [
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/helpers/home_helper.rb": {
+        "lines": [
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/customer.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/item.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/merchant.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/models/sale.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/controllers/home_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/parents/work/challenges/sales_admin/acsh-revenue-tracker/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          null
+        ]
+      }
+    },
+    "timestamp": 1591067209
+  }
+}

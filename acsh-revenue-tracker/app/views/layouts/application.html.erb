@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Acme Cult Hero Supplies: Revenue Tracker</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-info">
+      <div class="container">
+        <a class="navbar-brand" href="/">ACME Sales Tracker</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+            <button type="button" class="btn btn-default bg-light" data-toggle="modal" data-target="#csvModal">
+            Import CSV/Excel file
+            </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="col-md-12 text-center">
+      <% if notice %>
+        <p class="alert alert-success"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert alert-danger"><%= alert %></p>
+      <% end %>
+      </div>
+    </div>
+
+    <div class="container">
+      <%= yield %>
+    </div>
+    <footer>
+      <div class="container"><hr><small>Developed by Arul John</small></div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
