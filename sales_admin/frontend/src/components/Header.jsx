@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 
 import { useDropzone } from 'react-dropzone';
-import csv from 'csv';
 
 const headerRowStyle = {
     display: 'flex',
@@ -25,16 +24,14 @@ const inputBoxStyle = {
 
 export const Header = () => {
     const onDrop = useCallback(acceptedFiles => {
-       const reader = new FileReader();
-       reader.onabort = () => console.log("file reading was aborted");
-       reader.onerror = () => console.log("file reading failed");
-       reader.onload = () => {
-           csv.parse(reader.result, (_, data) => {
-               console.log("Parsed CSV data: ", data);
-           });
-       };
-
-       acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+        const fd = new FormData()
+        fd.append('form', acceptedFiles[0])
+        fetch('http://localhost:8080/upload/', {
+            body: fd,
+            method: 'POST',
+        }).then(data => {
+            console.log(data)
+        })
     }, []); 
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop })
