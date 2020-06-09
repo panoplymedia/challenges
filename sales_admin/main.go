@@ -42,7 +42,7 @@ func main() {
 			return
 		}
 
-		_, header, err := r.FormFile("file")
+		file, header, err := r.FormFile("file")
 		if err != nil {
 			respondWithError(w, 404, "could not find file with key 'file'")
 			return
@@ -51,8 +51,17 @@ func main() {
 		fileName := header.Filename
 		fmt.Println(fileName)
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
+		data, err := processCSV(file)
+		if err != nil {
+			respondWithError(w, 404, "unable to process csv file")
+		}
+
+		err = svc.SaveSales(data)
+		if err != nil {
+			respondWithError(w, 404, "unable to save sales data")
+		}
+
+		respondWithJSON(w, 200, data)
 	})
 
 	c := cors.New(cors.Options{

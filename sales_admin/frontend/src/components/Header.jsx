@@ -29,7 +29,8 @@ export const Header = () => {
         fetch('http://localhost:8080/upload', {
             body: fd,
             method: 'POST',
-        }).then(data => {
+        }).then(res => res.json())
+        .then(data => {
             console.log(data)
         })
     }, []); 
