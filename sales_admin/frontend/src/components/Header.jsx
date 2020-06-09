@@ -25,8 +25,8 @@ const inputBoxStyle = {
 export const Header = () => {
     const onDrop = useCallback(acceptedFiles => {
         const fd = new FormData()
-        fd.append('form', acceptedFiles[0])
-        fetch('http://localhost:8080/upload/', {
+        fd.append('file', acceptedFiles[0])
+        fetch('http://localhost:8080/upload', {
             body: fd,
             method: 'POST',
         }).then(data => {
