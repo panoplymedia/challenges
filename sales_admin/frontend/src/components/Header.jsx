@@ -27,26 +27,30 @@ const revenueStyle = {
 
 
 export const Header = () => {
-//    const [sales, setSales] = useState([])
     const [revTotal, setRevTotal] = useState(0)
     const onDrop = useCallback(acceptedFiles => {
         const fd = new FormData()
         fd.append('file', acceptedFiles[0])
         fetch('http://localhost:8080/upload', {
+            headers: new Headers({
+                 'Authorization': 'Bearer shmoken', 
+         }),
             body: fd,
             method: 'POST',
         }).then(res => res.json())
         .then(data => {
-            console.log(data)
-            fetch('http://localhost:8080/revenue').then(res => res.json())
+            fetch('http://localhost:8080/revenue', {
+                headers: new Headers({
+                    'Authorization': 'Bearer shmoken', 
+                })
+            }).then(res => res.json())
                 .then(data => {
                     setRevTotal(data)
                 })
         })
     }, []); 
-
     const { getRootProps, getInputProps } = useDropzone({ onDrop })
-    console.log(revTotal) 
+
     return (
         <span style={headerRowStyle}>
             <div style={headerTitleStyle}>ACME Cult Hero Supplies Sales Admin</div>

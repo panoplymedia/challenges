@@ -1,3 +1,5 @@
+github.com/DATA-DOG/go-sqlmock v1.4.1 h1:ThlnYciV1iM/V0OSF/dtkqWb6xo5qITT1TJBG1MRDJM=
+github.com/DATA-DOG/go-sqlmock v1.4.1/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
 github.com/eaigner/jet v0.0.0-20140105131908-ae59b2cccfe3 h1:dOZHh7hVmgid84dAUqqJFCeZipgQS+j2jAgGoUJOxpE=
 github.com/eaigner/jet v0.0.0-20140105131908-ae59b2cccfe3/go.mod h1:dDZTQm1VvYk0PrMlFHIhNE+6WPbmDv4EO8Qt96ix3Q4=
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=

@@ -51,14 +51,11 @@ func main() {
 			return
 		}
 
-		file, header, err := r.FormFile("file")
+		file, _, err := r.FormFile("file")
 		if err != nil {
 			respondWithError(w, 404, "could not find file with key 'file'")
 			return
 		}
-
-		fileName := header.Filename
-		fmt.Println(fileName)
 
 		data, err := processCSV(file)
 		if err != nil {
@@ -72,6 +69,11 @@ func main() {
 
 		respondWithJSON(w, 200, data)
 	})
+
+	amw := authMiddleware{}
+	amw.SetToken("shmoken")
+
+	r.Use(amw.AuthMiddleware)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3001"},
