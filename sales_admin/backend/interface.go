@@ -4,6 +4,7 @@ import "github.com/jmoiron/sqlx"
 
 type SalesService interface {
 	SaveSales(sale []Sale) error
+	CalculateRevenue() (float64, error)
 	CreateSalesTable() error
 }
 

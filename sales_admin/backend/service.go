@@ -72,6 +72,18 @@ func (s *salesService) SaveSales(sales []Sale) error {
 	return nil
 }
 
+func (s *salesService) CalculateRevenue() (float64, error) {
+	res := s.db.QueryRowx("SELECT SUM(price * quantity) FROM sale")
+	var sum float64
+
+	err := res.Scan(&sum)
+	if err != nil {
+		return 0.0, err
+	}
+
+	return sum, nil
+}
+
 func processCSV(file multipart.File) ([]Sale, error) {
 	reader := csv.NewReader(file)
 	reader.FieldsPerRecord = 0

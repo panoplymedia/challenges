@@ -35,6 +35,15 @@ func main() {
 		log.Fatal(err)
 	}
 
+	r.HandleFunc("/revenue", func(w http.ResponseWriter, r *http.Request) {
+		total, err := svc.CalculateRevenue()
+		if err != nil {
+			respondWithError(w, 404, err.Error())
+		}
+
+		respondWithJSON(w, 200, total)
+	})
+
 	r.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseMultipartForm(20000000)
 		if err != nil {
