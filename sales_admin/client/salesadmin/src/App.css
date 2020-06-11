@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.App {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1f1;
+    font-family: 'Roboto', sans-serif;
+    width: 100vw;
+    height: 100vh;
+}
+
+.App__AuthBox {
+    display: flex;
+    flex-flow: column nowrap;
+    font-family: 'Roboto', sans-serif;
+    align-self: center;
+    background: #1f1f1f;
+    color: #f1f1f1;
+    border-radius: 0.5em;
+    max-width: 900px;
+    width: 400px;
+    height: 300px;
+    
+}
+
+.App__AuthBox__Header {
+  text-align: center;
+  /* border: 1px solid red; */
+  background: #494949;
+  border-radius: 0.5em 0.5em 0 0;
+  border-bottom: 3px solid rgba(0,0,0,0.3);
+}
+
+.App__AuthBox__Group {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 80%;
+    margin: 1em auto 0 auto;
+    justify-content: center;
+    /* align-self: center; */
+    /* border: 1px solid red; */
+}
+.App__AuthBox > input {
+    width: 200px;
+    margin: 0 auto;
+    border-radius: 0.2em;
+    padding: 0.3em;
+    border: 1px solid #ccc;
+    margin-top: 0.1em;
+
+}
+
+.App__AuthBox__Group__Input {
+  margin: 0 calc(auto - 0.5em) 0 auto;
+  font-size: 1.1em;
+  font-family: 'Roboto', sans-serif;
+  width: 90%;
+  border-radius: 0.2em;
+
+  padding: 0.3em 0.1em 0.3em 0.5em;
+}
+
+.App__AuthBox__Group__Button {
+  width: 200px;
+  margin: 2em auto;
+  /* margin-left: calc(15% - 1em); */
+  /* margin-right: auto; */
+  padding: 0.5em;
+  font-family: 'Roboto', sans-serif;
+  color: #f1f1f1;
+  border: none;
+  background: rgb(35, 130, 255);
+  border-radius: 0.3em;
+
+}
+.App__AuthBox__Group__Button:hover {
+    background: rgb(41, 123, 230);
+    transition: 0.3s ease;
+}
+
+.App__Dashboard {
+  display: flex;
+  flex-flow: column nowrap;
+  max-width: 900px;
+  margin: 0 auto;
+  /* justify-content: space-around; */
+}
+
+.App__Dashboard__Controls {
+  max-width: 900px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  font-family: 'Roboto';
+  background: rgb(174, 239, 255);
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border-radius: 0.3em;
+
+}
+
+.App__Dashboard__Controls__Revenue {
+  /* margin: -0.5em -1em -0.5em 0;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
+  padding-top: 0.6em; */
+  /* background: rgb(0, 204, 255); */
+  /* min-height: 100%; */
+  border-radius:  0 0.3em 0.3em 0;
+  /* color: white; */
+  /* align-self: center; */
+  /* border: 1px solid red; */
+  /* height: 100%; */
+}
+.App__Dashboard__Table__MUI {
+  min-width: 900px;
+  /* font-weight: 700; */
+}
+
