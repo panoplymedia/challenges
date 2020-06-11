@@ -38,7 +38,7 @@ func main() {
 	r.HandleFunc("/revenue", func(w http.ResponseWriter, r *http.Request) {
 		total, err := svc.CalculateRevenue()
 		if err != nil {
-			respondWithError(w, 404, err.Error())
+			respondWithError(w, 500, err.Error())
 		}
 
 		respondWithJSON(w, 200, total)
@@ -47,24 +47,25 @@ func main() {
 	r.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseMultipartForm(20000000)
 		if err != nil {
-			respondWithError(w, 404, "file exceeds max 20mb")
+			respondWithError(w, 400, "file exceeds max 20mb")
 			return
 		}
 
 		file, _, err := r.FormFile("file")
 		if err != nil {
-			respondWithError(w, 404, "could not find file with key 'file'")
+			respondWithError(w, 400, "could not find file with key 'file'")
 			return
 		}
 
 		data, err := processCSV(file)
 		if err != nil {
-			respondWithError(w, 404, "unable to process csv file")
+			respondWithError(w, 500, "unable to process csv file")
 		}
 
 		err = svc.SaveSales(data)
 		if err != nil {
-			respondWithError(w, 404, "unable to save sales data")
+			fmt.Println(err)
+			respondWithError(w, 500, "unable to save sales data")
 		}
 
 		respondWithJSON(w, 200, data)
