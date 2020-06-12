@@ -23,6 +23,8 @@ and create the same viewable table via `JOIN`. This should allow for a lot of ex
 ##### Revenue Calculation:
 Presently not scalable, is done via a backend call that adds the total of each row in the database. Ideally you'd run something like this on either a copy of the database and let it take its time, or run segmented reporting like monthly, annualized, etc. Decided not to do client-side for fear of potential test cases crashing the browser.  
 
+#### Front-end:
+Presently everything is done and accounted for in `App.js`, I'd make reusable components instead!
 
 ##### Authentication:
 Quick and dirty GitHub OAuth2 implementation using express and express-session. Express-session is not scalable seemingly by design. Sessions are stored in server memory with no overflow control like an LRU Cache. For scalability's sake, probably better to use a redis store or a file-based session store in a similar fashion as Apache Server.
