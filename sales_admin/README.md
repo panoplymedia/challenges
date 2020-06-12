@@ -17,24 +17,6 @@ I'd split this into 4 or so tables for data organization:
 |price | address | last_name | product |
 |merchant_id | | address | |
 
-| name |---|---|
-- - id
-name
-price
-merchant_id
-- merchants
-id
-name
-address
-- customer
- id
-first_name
-last_name
-address
-- orders
-  id
-  customer_id
-  product
 
 and create the same viewable table via `JOIN`. This should allow for a lot of expandability, features, and the kitchen sink. 
 
