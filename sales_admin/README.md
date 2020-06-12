@@ -70,6 +70,8 @@ That should be everything, so fire it up with:
 node index.js
 ```
 
+### Screenshot:
+<img src="https://i.imgur.com/qVoeRoX.png" />
 
 
 ## Background
