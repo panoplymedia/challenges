@@ -186,6 +186,7 @@ class App extends Component {
           return (
             <div className="App">
               <div className="App__Navbar">
+                <div className="Company">ACHS</div>
               <div className="Log">Logged in as {this.state.username}</div>
 
               </div>

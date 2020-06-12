@@ -1,5 +1,87 @@
 # Sales Admin
 
+Implementation by @Daniel-Edminster
+
+
+###Notes on scalability
+In a production environment, there are a fair number of things I'd do differently. I'll break these down by category.
+
+#####Database:
+I'd split this into 4 or so tables for data organization:
+- products
+id
+name
+price
+merchant_id
+- merchants
+id
+name
+address
+- customer
+ id
+first_name
+last_name
+address
+- orders
+  id
+  customer_id
+  product
+
+and create the same viewable table via `JOIN`. This should allow for a lot of expandability, features, and the kitchen sink. 
+
+#####Revenue Calculation:
+Presently not scalable, is done via a backend call that adds the total of each row in the database. Ideally you'd run something like this on either a copy of the database and let it take its time, or run segmented reporting like monthly, annualized, etc. Decided not to do client-side for fear of potential test cases crashing the browser.  
+
+
+#####Authentication:
+Quick and dirty GitHub OAuth2 implementation using express and express-session. Express-session is not scalable seemingly by design. Sessions are stored in server memory with no overflow control like an LRU Cache. For scalability's sake, probably better to use a redis store or a file-based session store in a similar fashion as Apache Server.
+####Setup:
+```
+git clone https://github.com/Daniel-Edminster/challenges
+```
+#####Front-end:
+```
+cd challenges/sales_admin/client/salesadmin
+npm install
+npm run start
+```
+#####Back-end:
+#####Postgres Setup:
+```
+brew install postgres
+psql
+```
+then run the creation queries in `challenges/salesadmin/server/schema.sql`, but not as an infile.
+Lastly, edit the contents of `challenges/salesadmin/server/db.example.js`,
+change to your appropriate credentials, and **resave as `db.js`**. 
+
+######Node setup:
+
+```
+cd challenges/sales_admin/server
+npm install
+```
+You'll need to edit `challenges/sales_admin/server/config.example.js` to get started.
+This application uses GitHub for Authentication, so you'll need to setup an OAuth app [here](https://github.com/settings/applications/new), with the following credentials:
+**Homepage URL**: `http://localhost:3000`
+**Authorization callback URL**: `http://localhost:8080/auth/github/callback`
+
+Modify the contents of `config.example.js`:
+```
+    GITHUB_CLIENT_ID: "YOUR_CLIENT_ID_HERE",
+    GITHUB_CLIENT_SECRET: "YOUR_CLIENT_SECRET_HERE",
+    GITHUB_CALLBACK_URL: "http://localhost:8080/auth/github/callback"
+```
+and **resave as `config.js`**.
+
+That should be everything, so fire it up with:
+```
+node index.js
+```
+
+
+
+
 ## Background
 
 Your company just acquired Acme Cult Hero Supplies. They have been using a CSV worksheet to track sales data, and you need to transform that into a web application to track revenue.

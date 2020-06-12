@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const parser = require("body-parser");
-
 const passport = require("passport");
 const session = require("express-session");
 const fileUpload = require('express-fileupload');
@@ -23,22 +22,20 @@ passport.serializeUser(function (user, done) {
   });
 
 
-  passport.use(
-	new GitHubStrategy(
-	  {
+passport.use(
+new GitHubStrategy(
+	{
 		clientID: CONFIG.GITHUB_CLIENT_ID,
 		clientSecret: CONFIG.GITHUB_CLIENT_SECRET,
 		callbackURL: CONFIG.GITHUB_CALLBACK_URL,
-	  },
-	  function (accessToken, refreshToken, profile, done) {
-
+	},
+		function (accessToken, refreshToken, profile, done) {
 			process.nextTick(function () {
 				return done(null, profile);
 			});
-
-	  }
+		}
 	)
-  );
+);
 
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
@@ -218,19 +215,7 @@ app.get("/login", (req, res) => {
 			res.json(req.user);
 		} 
 		else res.json({ auth: false });
-			// if ("passportauth", passport.authenticate("github", { scope: ["read:user"] })) {
-			// 	console.log(req);
-			// 	req.auth = true;
-			// 	console.log(req.user)
-			// 	// req.user.auth = true;
-			// 	// res.json({ auth: true} );
-			// 	res.json(req.user)
-			//   }
-			//   else {
-			// 	// console.log(req);
 
-			// 	res.json({ auth: false });
-			//   }
   })
 
   
@@ -240,11 +225,6 @@ app.listen(app.get("port"), () => {
 	console.log(`PORT: ${app.get("port")} `);
 });
 
-//taken from passport-github2 example
-function ensureAuthenticated(req, res, next) {
-	if (req.isAuthenticated()) { return next(); }
-	res.redirect('/login')
-  }
 
 
 inlineCheck = (req) => {

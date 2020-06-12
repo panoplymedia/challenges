@@ -157,7 +157,8 @@
   /* padding: 0.5em; */
   
   display: flex;
-  flex-flow: row-reverse nowrap;
+  flex-flow: row nowrap;
+  justify-content: space-between;
   top: 0;
   position: fixed;
   width: 100vw;
@@ -170,6 +171,12 @@
 }
 
 .Log {
+  align-self: center;
+  font-size: 1.2em;
+  padding: 0 1em;
+}
+
+.Company {
   align-self: center;
   font-size: 1.2em;
   padding: 0 1em;
