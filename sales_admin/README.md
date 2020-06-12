@@ -1,6 +1,6 @@
 # Sales Admin
 
-Implementation by @Daniel-Edminster
+Implementation by @Daniel-Edminster using React, Node, Express, and Postgres.
 
 
 ### Notes on scalability
