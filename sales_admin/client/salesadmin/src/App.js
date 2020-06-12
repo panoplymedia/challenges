@@ -16,27 +16,80 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-        auth: true,
+        auth: false,
         file: '',
         isUploading: false,
         progress: 0,
-        salesData: ''
+        salesData: '',
+        inputKey: Date.now(),
+        revenue: 0,
+        JSX: ''
     };
   }
 
   componentDidMount(){
 
-    //axios...
+
+    this.initializePage();
+    this.authCheck();
 
 
   }
 
-  getSalesData = () => {
-      axios({
-        method: 'GET',
-        url: `${BASE_URL}/api/all`,
-        // withCredentials: true
-      })
+  authCheck = () => {
+    axios({
+      url: `${BASE_URL}/authcheck`,
+      method: 'GET',
+      withCredentials: true
+    }).then(res => { 
+      console.log('authcheck', res) 
+      if(res.data.auth === true) this.setState({ auth: true, username: res.data.username });
+    });
+  }
+  
+  initializePage = () => {
+    this.getSalesData(this.getTableJSX);
+  }
+  getTotalRevenue = () => {
+    axios({
+      method: 'GET',
+      url: `${BASE_URL}/api/salesdata/revenue`,
+      withCredentials: true
+    }).then(res => {
+        // console.log(res.data);
+        this.setState({ revenue : res.data.revenue});
+        this.initializePage();
+    }).catch(err => console.log(err))
+
+
+  }
+
+  
+
+  getSalesData = (cb = '') => {
+      setTimeout(() => {
+              
+            axios({
+              method: 'GET',
+              url: `${BASE_URL}/api/salesdata`,
+              withCredentials: true
+            }).then(res => {
+                if(res.data.rowCount === 0) {
+                  this.setState({ salesData: '' })
+                  console.log('set salesData to nothing');
+                }
+                else {
+                  console.log('getSalesData', res.data);
+                  if(!cb)
+                    this.setState({ salesData: res.data })
+                  else {
+                    this.setState({ salesData: res.data }, cb);
+                  }
+                  
+                }
+            }).catch(err => console.log('error', err));
+
+          }, 200);
   }
 
   setFile = (event) => {
@@ -45,6 +98,13 @@ class App extends Component {
 
   handleUploaderResponse = (res) => {
       console.log(res);
+      this.setState({
+        progress: 0,
+        file: '',
+        inputKey: Date.now()
+      });
+        this.getSalesData(this.getTableJSX);
+
   }
 
   handleUploader = (event) => {
@@ -71,33 +131,64 @@ class App extends Component {
           onUploadProgress: (ProgressEvent) => {
             let percentage = Math.round( (ProgressEvent.loaded * 100) / ProgressEvent.total );
             this.setState({ progress: percentage }, this.logPercent)
-        }
-          // withCredentials: true
-        })
+          },
+          data: fd,
+          
+          withCredentials: true
+        }).then(res => this.handleUploaderResponse(res))
+        .catch(err => this.handleUploaderResponse(JSON.stringify(err)));
 
       }
 
   }
 
+  getTableJSX = () => {
+      let tableData  = [...this.state.salesData];
+      console.log('td', tableData);
+      // console.log('tabledata', tableData)
+      let JSX = tableData.map(sale => {
+        return(
+        <TableRow key={sale.id}>
+        <TableCell component="th" scope="row">{sale.customer_name}</TableCell>
+        {/* <TableCell align="right">{sale.customer_name}</TableCell> */}
+        <TableCell align="right">{sale.description}</TableCell>
+        <TableCell align="right">{sale.price}</TableCell>
+        <TableCell align="right">{sale.quantity}</TableCell>
+        <TableCell align="right">{sale.merchant_name}</TableCell>
+        <TableCell align="right">{sale.merchant_address}</TableCell>
+      </TableRow>
+        );
+      });
+      this.setState({ JSX: JSX});
+  }
+
+  logPercent = () => console.log(this.state.progress);
+
+  clearDB = () => {
+    window.confirm('This will erase all data in the database and is irreversible. Are you sure?');
+    axios({
+      method: 'GET',
+      url: `${BASE_URL}/api/deleteall`,
+      withCredentials: true
+    }).then(res => { 
+        if(res.data.Success==="deleted")
+        { 
+           this.initializePage();
+           this.setState({ JSX: '', revenue: 0 });
+        }
+    });
+  }
+  
   render() {
-
-    function createData(name, calories, fat, carbs, protein) {
-      return { name, calories, fat, carbs, protein };
-    }
-    
-    const rows = [
-      createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-      createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-      createData('Eclair', 262, 16.0, 24, 6.0),
-      createData('Cupcake', 305, 3.7, 67, 4.3),
-      createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
-
 
       if(this.state.auth === true)
         {
           return (
             <div className="App">
+              <div className="App__Navbar">
+              <div className="Log">Logged in as {this.state.username}</div>
+
+              </div>
 
               <div className="App_Dashboard">
 
@@ -106,20 +197,25 @@ class App extends Component {
                 <div className="App__Dashboard__Controls__Uploader">
                   <form>
                     <label>CSV Uploader</label> {/*<br /> */}
-                    <input type="file" accept="text/csv" name="csv" onChange={this.setFile}/>
+                    <input type="file" key={this.state.inputKey} accept="text/csv" name="csv" onChange={this.setFile}/>
                     {/* <br /> */}
                     <button onClick={this.handleUploader}>Submit</button>
                   </form>
 
                 </div>
-
-                <div className="App__Dashboard__Controls__Revenue">Total: $1,595.93</div>
-
-                {/* <div className="App__Dashboard__Controls__ */}
-
+                <div className="App__Dashboard__Controls__Revenue">Total: ${this.state.revenue}</div>
 
 
               </div>
+              <div className="App__Dashboard__Buttons">
+              <button onClick={this.getTotalRevenue}>Calculate Revenue</button>
+                <button onClick={this.clearDB}>Clear Database</button>
+                
+
+
+              </div>
+
+
 
               <div className="App__Dashboard__Table">
 
@@ -138,19 +234,7 @@ class App extends Component {
                   <TableBody>
 
 
-                    {rows.map((row) => (
-                      <TableRow key={row.name}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                      </TableRow>
-                    ))}
-
+                  {this.state.JSX}
 
                   </TableBody>
                 </Table>
@@ -174,16 +258,8 @@ class App extends Component {
                 <h4>Please Login:</h4>
                 </div>
 
-                <div className="App__AuthBox__Group">
-                <label className="">Username:</label>
-                <input className="App__AuthBox__Group__Input" type="text" placeholder="demo" />
-                </div>
-                <div className="App__AuthBox__Group">
-                <label className="">Password:</label>
-                <input className="App__AuthBox__Group__Input" type="password" placeholder="demo" />
-                </div>
-                <button className="App__AuthBox__Group__Button">Submit</button>
-                </div>
+                    <a className="GitAuth" href={`${BASE_URL}/login`}>Login with GitHub</a>
+            </div>
             </div>
           );
       }

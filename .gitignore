@@ -1,3 +1,5 @@
 .DS_Store
 sales_admin/client/salesadmin/node_modules
 sales_admin/server/node_modules
+sales_admin/server/config.js
+sales_admin/server/db.js

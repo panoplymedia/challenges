@@ -1,34 +1,44 @@
 const express = require("express");
 const app = express();
 const parser = require("body-parser");
-const fetch = require("node-fetch");
-const shell = require("shelljs");
+
+const passport = require("passport");
+const session = require("express-session");
 const fileUpload = require('express-fileupload');
-const FormData = require('form-data');
+
 
 const CONFIG = require("./config.js");
 
-let fs = require('fs'),
-// http = require('http'),
-// https = require('https');
+let fs = require('fs');
+const csvParser = require('csv-parser');
+
+const pool = require('./db');
+const GitHubStrategy = require("passport-github2").Strategy;
+
+passport.serializeUser(function (user, done) {
+	done(null, user);
+  });
+  passport.deserializeUser(function (obj, done) {
+	done(null, obj);
+  });
 
 
-// shell.exec('ffmpeg -formats');
+  passport.use(
+	new GitHubStrategy(
+	  {
+		clientID: CONFIG.GITHUB_CLIENT_ID,
+		clientSecret: CONFIG.GITHUB_CLIENT_SECRET,
+		callbackURL: CONFIG.GITHUB_CALLBACK_URL,
+	  },
+	  function (accessToken, refreshToken, profile, done) {
 
-// let options = {
-// 	key: fs.readFileSync('/etc/letsencrypt/live/danieledminster.com/privkey.pem'),
-// 	cert: fs.readFileSync('/etc/letsencrypt/live/danieledminster.com/cert.pem')
-// };
+			process.nextTick(function () {
+				return done(null, profile);
+			});
 
-// let server = https.createServer(options, app).listen(8080, () => 'listening on 8080');
-
-
-
-// let redis = require("redis");
-// let session = require("express-session");
-// let redisStore = require("connect-redis")(session);
-// let client = redis.createClient();
-
+	  }
+	)
+  );
 
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
@@ -39,7 +49,7 @@ app.use(function (req, res, next) {
 		"Access-Control-Allow-Headers",
 		"Origin, X-Requested-With, Content-Type, Accept"
 	);
-	// res.header("Access-Control-Allow-Credentials", "true");
+	res.header("Access-Control-Allow-Credentials", "true");
 	res.header("Access-Control-Allow-Origin", CONFIG.EXPRESS_ALLOW_ORIGIN);
 	
 
@@ -47,26 +57,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(
-	// session({
-	// 	secret: "gameofbandsdev",
-	// 	// cookieName: 'gobsession',
-	// 	// create new redis store.
-	// 	name: "__gameofbandsdev",
-	// 	store: new redisStore({
-	// 		host: "localhost",
-	// 		port: 6379,
-	// 		client: client,
-	// 		ttl: 260,
-	// 	}),
-	// 	saveUninitialized: false,
-	// 	resave: false,
-	// 	cookie: {
-	// 		secure: false,
-	// 		maxAge: 31536000000,
-	// 		httpOnly: false,
-	// 	},
-	// })
-);
+	session({ secret: "acme app", resave: false, saveUninitialized: false })
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+
 
 app.use(fileUpload({
     useTempFiles : true,
@@ -74,107 +70,184 @@ app.use(fileUpload({
 }));
 
 
-function setUserSession(sessionVars, req, expressResponse) {
-	let baseURL = "https://oauth.reddit.com/api/v1/me";
-	// let rm;
-	const f = fetch(baseURL, {
-		headers: {
-			Authorization: `Bearer ${sessionVars.access_token}`,
-			scope: "identity",
-		},
-	})
-		.then((res) => res.json())
-		.then((res) => {
-			// req.session.uid = res.name;
-			req.session.key = res.name;
-			req.session["tokens"] = sessionVars;
-			console.log("session key:", req.session.key);
-			console.log(res.name, res.link_karma, res.comment_karma);
-
-			// globalsess = req.session;
-
-			// expressResponse.json(req.session);
-			req.session.save();
-
-			expressResponse.redirect(CONFIG.ORIGIN_HOME);
-			// response.redirect('https://google.com');
-		});
-	// return rm;
-}
-
-app.get("/api/all", (req, res) => {
-	// console.log("get session id: ", req.session.id);
-	// res.json(req.session);
-});
-
-
-
 
 
 
 app.post("/api/upload", (req, res) => {
-	console.log("request body:", req.body);
+	// console.log("request body:", req.body);
 
+	if( inlineCheck(req) ) {
+			if (!req.files || Object.keys(req.files).length === 0)
+				res.json({ 'Error': 'No file uploaded' })
+			else {
 
-	if (!req.files || Object.keys(req.files).length === 0)
-		res.json({ 'Error': 'No file uploaded' })
+				//keep the object properties consistent with our db columns
+				let sales = {
+					customer_name: [],
+					description: [],
+					price: [],
+					quantity: [],
+					merchant_name: [],
+					merchant_address: []
+				}
+
+				let csv = req.files.csv
+
+				
+				//give it a unique name (like a unix timestamp) in case we decide to keep these on the server
+				let csvName = Math.floor(Date.now() / 1000) + '.csv';
+				let filePath = CONFIG.FILE_PATH + `/${csvName}`;
+
+				
+				let result = [];
+				
+				csv.mv(filePath).then(_ => {
+
+					fs.createReadStream(filePath)
+					.pipe(csvParser())
+					.on('data', (data) => result.push(data))
+					.on('end', () => {
+						// console.log(result);
+
+						result.forEach(sale => {
+							pool.query(`INSERT INTO salesdata VALUES( DEFAULT, '${sale['Customer Name']}', 
+							'${sale['Item Description']}', '${sale['Item Price']}', '${sale['Quantity']}', 
+							'${sale['Merchant Name']}', '${sale['Merchant Address']}')`);
+							console.log('done');
+						})
+						res.json(result);
+					});
+
+				})
+			}
+	}
 	else {
-
-		//keep the object properties consistent with our db columns
-		let sale = {
-			customer_name: '',
-			description: '',
-			price: '',
-			quantity: '',
-			merchant_name: '',
-			merchant_address: ''
-		}
-
-
-		// let userSong = req.files.song;
-
-		let csv = req.files.csv
-
-		
-		//give it a unique name (like a unix timestamp) in case we decide to keep these on the server
-		let csvName = Math.floor(Date.now() / 1000) + '.csv';
-		let filePath = CONFIG.FILE_PATH + `/${csvName}`;
-		
-		csv.mv(filePath);
-
-		let fh = readFileSync(filePath);
-
-
-
+		res.statusCode(401);
 	}
 });
 
-app.delete("/delete/:id", (req, res) => {
-	console.log(req);
-	Song.findById(req.params.id, (err, songUpdate) => {
-		if (err) {
-			res.status(500).send(err);
-		} else {
-			songUpdate.remove((err) => {
-				if (err) res.status(500).send(err);
-				else {
-					let success = {
-						response: "Removed from Database",
-					};
-					res.json(success);
-				}
-			});
-		}
-	});
-});
+app.get('/api/deleteall', (req, res) => {
+	if(inlineCheck(req)) {
+		pool.query('DELETE FROM salesdata').then(_ => console.log('deleted'));
+		res.json({ 'Success': 'deleted'});
+	}
+	else {
+		res.statusCode(401);
+	}
+})
 
-// app.listen(4000, () => console.log("listening on localhost:4000/"));
+app.get('/api/salesdata', (req, res) => {
+	if(inlineCheck(req)) {
+		pool.query('SELECT * FROM salesdata')
+		.then(result => {
+			// console.log(result);
+				if(result.rowCount > 0)
+					res.json(result.rows);
+				else 
+					res.json({ 'rowCount' : 0})
+		});
+	}
+	else {
+		res.statusCode(401);
+	}
+})
+
+app.get('/api/salesdata/revenue',  (req, res) => {
+	if(inlineCheck(req)) {
+		pool.query('SELECT * FROM salesdata')
+		.then(result => {
+			// console.log(result);
+			if(result.rowCount > 0)
+			{
+				let total = 0;
+				result.rows.forEach(sale => {
+					total += parseFloat(sale.price * sale.quantity);
+				})
+			
+				console.log(total);
+				res.json({'revenue': total});
+			}
+			else 
+				res.json({ 'revenue' : 0})
+		})
+	} 
+	else {
+		res.statusCode(401);
+	}
+})
 
 
+
+app.get("/login", (req, res) => {
+
+	res.redirect("/auth/github");
+  });
+
+  app.get(
+	"/auth/github",
+	passport.authenticate("github", { scope: ["read:user"] }),
+	function (req, res) {}
+  );
+  
+  app.get(
+	"/auth/github/callback",
+	passport.authenticate("github", {
+		
+	  failureRedirect: "/logout",
+
+	}),
+	(req, res) =>{
+	//   console.log(req);
+	  console.log('callback')
+	  	// res.json(req.user);
+	  res.redirect('http://localhost:3000');
+	}
+  );
+
+  app.get("/logout", (req, res) => {
+	req.logout();
+	
+  });
+
+  app.get('/authcheck', (req, res) => {
+
+		console.log(req.user);
+
+		if(inlineCheck(req)) {
+			req.user.auth = true;
+			res.json(req.user);
+		} 
+		else res.json({ auth: false });
+			// if ("passportauth", passport.authenticate("github", { scope: ["read:user"] })) {
+			// 	console.log(req);
+			// 	req.auth = true;
+			// 	console.log(req.user)
+			// 	// req.user.auth = true;
+			// 	// res.json({ auth: true} );
+			// 	res.json(req.user)
+			//   }
+			//   else {
+			// 	// console.log(req);
+
+			// 	res.json({ auth: false });
+			//   }
+  })
+
+  
 app.set("port", process.env.PORT || 8080);
 
-
 app.listen(app.get("port"), () => {
-	console.log(`✅ PORT: ${app.get("port")} 🌟`);
+	console.log(`PORT: ${app.get("port")} `);
 });
 
+//taken from passport-github2 example
+function ensureAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) { return next(); }
+	res.redirect('/login')
+  }
+
+
+inlineCheck = (req) => {
+	// console.log(req);
+	return req.session.passport.user !== undefined ? true: false;
+};
