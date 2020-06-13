@@ -1,52 +1,45 @@
 # Sales Admin
 
-Implementation by @Daniel-Edminster
+Implementation by @Daniel-Edminster using React, Node, Express, and Postgres.
 
 
-###Notes on scalability
+### Notes on scalability
 In a production environment, there are a fair number of things I'd do differently. I'll break these down by category.
 
-#####Database:
+##### Database:
 I'd split this into 4 or so tables for data organization:
-- products
-id
-name
-price
-merchant_id
-- merchants
-id
-name
-address
-- customer
- id
-first_name
-last_name
-address
-- orders
-  id
-  customer_id
-  product
+
+
+| products | merchants | customer | orders |
+|---|---|---|---|
+| id | id | id | id |
+|name|name|first_name|customer_id|
+|price | address | last_name | product |
+|merchant_id | | address | |
+
 
 and create the same viewable table via `JOIN`. This should allow for a lot of expandability, features, and the kitchen sink. 
 
-#####Revenue Calculation:
+##### Revenue Calculation:
 Presently not scalable, is done via a backend call that adds the total of each row in the database. Ideally you'd run something like this on either a copy of the database and let it take its time, or run segmented reporting like monthly, annualized, etc. Decided not to do client-side for fear of potential test cases crashing the browser.  
 
+#### Front-end:
+Presently everything is done and accounted for in `App.js`, I'd make reusable components instead!
 
-#####Authentication:
+##### Authentication:
 Quick and dirty GitHub OAuth2 implementation using express and express-session. Express-session is not scalable seemingly by design. Sessions are stored in server memory with no overflow control like an LRU Cache. For scalability's sake, probably better to use a redis store or a file-based session store in a similar fashion as Apache Server.
 ####Setup:
 ```
 git clone https://github.com/Daniel-Edminster/challenges
 ```
-#####Front-end:
+##### Front-end:
 ```
 cd challenges/sales_admin/client/salesadmin
 npm install
 npm run start
 ```
-#####Back-end:
-#####Postgres Setup:
+##### Back-end:
+##### Postgres Setup:
 ```
 brew install postgres
 psql
@@ -55,7 +48,7 @@ then run the creation queries in `challenges/salesadmin/server/schema.sql`, but 
 Lastly, edit the contents of `challenges/salesadmin/server/db.example.js`,
 change to your appropriate credentials, and **resave as `db.js`**. 
 
-######Node setup:
+##### Node setup:
 
 ```
 cd challenges/sales_admin/server
@@ -79,7 +72,8 @@ That should be everything, so fire it up with:
 node index.js
 ```
 
-
+### Screenshot:
+<img src="https://i.imgur.com/qVoeRoX.png" />
 
 
 ## Background
