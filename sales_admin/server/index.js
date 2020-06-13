@@ -107,10 +107,10 @@ app.post("/api/upload", (req, res) => {
 						// console.log(result);
 
 						result.forEach(sale => {
-							pool.query(`INSERT INTO salesdata VALUES( DEFAULT, '${sale['Customer Name']}', 
-							'${sale['Item Description']}', '${sale['Item Price']}', '${sale['Quantity']}', 
-							'${sale['Merchant Name']}', '${sale['Merchant Address']}')`);
-							console.log('done');
+							console.log(sale);
+							pool.query(`INSERT INTO salesdata VALUES( DEFAULT, $1, $2, $3, $4, $5, $6)`, 
+							[ sale['Customer Name'], sale['Item Description'], sale['Item Price'], 
+							sale['Quantity'], sale['Merchant Name'], sale['Merchant Address'] ]);
 						})
 						res.json(result);
 					});
