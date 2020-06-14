@@ -7,6 +7,8 @@ Implementation by @Daniel-Edminster using React, Node, Express, and Postgres.
 In a production environment, there are a fair number of things I'd do differently. I'll break these down by category.
 
 ##### Database:
+Presently, the Table Schema is identical to the provided CSV. 
+
 I'd split this into 4 or so tables for data organization:
 
 
