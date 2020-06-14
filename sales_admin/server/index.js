@@ -4,7 +4,7 @@ const parser = require("body-parser");
 const passport = require("passport");
 const session = require("express-session");
 const fileUpload = require('express-fileupload');
-
+const FileStore  = require('session-file-store')(session);
 
 const CONFIG = require("./config.js");
 
@@ -54,7 +54,11 @@ app.use(function (req, res, next) {
 });
 
 app.use(
-	session({ secret: "acme app", resave: false, saveUninitialized: false })
+	session({ 
+		store: new FileStore,
+		secret: "acme app", 
+		resave: false, 
+		saveUninitialized: false })
   );
   app.use(passport.initialize());
   app.use(passport.session());
@@ -72,80 +76,94 @@ app.use(fileUpload({
 
 app.post("/api/upload", (req, res) => {
 	// console.log("request body:", req.body);
+	try {
+		if( inlineCheck(req) ) {
+				if (!req.files || Object.keys(req.files).length === 0)
+					res.json({ 'Error': 'No file uploaded' })
+				else {
 
-	if( inlineCheck(req) ) {
-			if (!req.files || Object.keys(req.files).length === 0)
-				res.json({ 'Error': 'No file uploaded' })
-			else {
+					//keep the object properties consistent with our db columns
+					let sales = {
+						customer_name: [],
+						description: [],
+						price: [],
+						quantity: [],
+						merchant_name: [],
+						merchant_address: []
+					}
 
-				//keep the object properties consistent with our db columns
-				let sales = {
-					customer_name: [],
-					description: [],
-					price: [],
-					quantity: [],
-					merchant_name: [],
-					merchant_address: []
+					let csv = req.files.csv
+
+					
+					//give it a unique name (like a unix timestamp) in case we decide to keep these on the server
+					let csvName = Math.floor(Date.now() / 1000) + '.csv';
+					let filePath = CONFIG.FILE_PATH + `/${csvName}`;
+
+					
+					let result = [];
+					
+					csv.mv(filePath).then(_ => {
+
+						fs.createReadStream(filePath)
+						.pipe(csvParser())
+						.on('data', (data) => result.push(data))
+						.on('end', () => {
+							// console.log(result);
+
+							result.forEach(sale => {
+								console.log(sale);
+								pool.query(`INSERT INTO salesdata VALUES( DEFAULT, $1, $2, $3, $4, $5, $6)`, 
+								[ sale['Customer Name'], sale['Item Description'], sale['Item Price'], 
+								sale['Quantity'], sale['Merchant Name'], sale['Merchant Address'] ]);
+							})
+							res.json(result);
+						});
+
+					})
 				}
-
-				let csv = req.files.csv
-
-				
-				//give it a unique name (like a unix timestamp) in case we decide to keep these on the server
-				let csvName = Math.floor(Date.now() / 1000) + '.csv';
-				let filePath = CONFIG.FILE_PATH + `/${csvName}`;
-
-				
-				let result = [];
-				
-				csv.mv(filePath).then(_ => {
-
-					fs.createReadStream(filePath)
-					.pipe(csvParser())
-					.on('data', (data) => result.push(data))
-					.on('end', () => {
-						// console.log(result);
-
-						result.forEach(sale => {
-							console.log(sale);
-							pool.query(`INSERT INTO salesdata VALUES( DEFAULT, $1, $2, $3, $4, $5, $6)`, 
-							[ sale['Customer Name'], sale['Item Description'], sale['Item Price'], 
-							sale['Quantity'], sale['Merchant Name'], sale['Merchant Address'] ]);
-						})
-						res.json(result);
-					});
-
-				})
-			}
+		}
+		else {
+			res.status(401);
+		}
 	}
-	else {
-		res.statusCode(401);
+	catch(err) {
+		res.status(401);
 	}
 });
 
 app.get('/api/deleteall', (req, res) => {
-	if(inlineCheck(req)) {
-		pool.query('DELETE FROM salesdata').then(_ => console.log('deleted'));
-		res.json({ 'Success': 'deleted'});
+	try {
+		if(inlineCheck(req)) {
+			pool.query('DELETE FROM salesdata').then(_ => console.log('deleted'));
+			res.json({ 'Success': 'deleted'});
+		}
+		else {
+			res.status(401);
+		}
 	}
-	else {
-		res.statusCode(401);
+	catch(err) {
+		res.status(401);
 	}
 })
 
 app.get('/api/salesdata', (req, res) => {
-	if(inlineCheck(req)) {
-		pool.query('SELECT * FROM salesdata')
-		.then(result => {
-			// console.log(result);
-				if(result.rowCount > 0)
-					res.json(result.rows);
-				else 
-					res.json({ 'rowCount' : 0})
-		});
+	try {
+		if(inlineCheck(req)) {
+			pool.query('SELECT * FROM salesdata')
+			.then(result => {
+				// console.log(result);
+					if(result.rowCount > 0)
+						res.json(result.rows);
+					else 
+						res.json({ 'rowCount' : 0})
+			});
+		}
+		else {
+			res.status(401);
+		}
 	}
-	else {
-		res.statusCode(401);
+	catch(err) {
+		res.status(401);
 	}
 })
 
@@ -196,8 +214,8 @@ app.get("/login", (req, res) => {
 	(req, res) =>{
 	//   console.log(req);
 	  console.log('callback')
-	  	// res.json(req.user);
-	  res.redirect('http://localhost:3000');
+	  	
+	  res.redirect(CONFIG.EXPRESS_ALLOW_ORIGIN);
 	}
   );
 
@@ -209,13 +227,17 @@ app.get("/login", (req, res) => {
   app.get('/authcheck', (req, res) => {
 
 		console.log(req.user);
-
-		if(inlineCheck(req)) {
-			req.user.auth = true;
-			res.json(req.user);
-		} 
-		else res.json({ auth: false });
-
+		try {		
+			if(inlineCheck(req)) {
+				req.user.auth = true;
+				res.json(req.user);
+			} 
+		
+			else res.json({ auth: false });
+		}
+		catch(err) { 
+			res.json({ auth: false});
+		}
   })
 
   
@@ -229,5 +251,7 @@ app.listen(app.get("port"), () => {
 
 inlineCheck = (req) => {
 	// console.log(req);
+	// if(!req.session.passport.user) return false;
+	// else return true;
 	return req.session.passport.user !== undefined ? true: false;
 };

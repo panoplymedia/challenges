@@ -29,9 +29,10 @@ class App extends Component {
 
   componentDidMount(){
 
-
-    this.initializePage();
     this.authCheck();
+    // if(this.state.auth) 
+    this.initializePage();
+    
 
 
   }
