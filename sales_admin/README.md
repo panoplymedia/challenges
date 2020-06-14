@@ -27,8 +27,12 @@ Presently not scalable, is done via a backend call that adds the total of each r
 Presently everything is done and accounted for in `App.js`, I'd make reusable components instead!
 
 ##### Authentication:
-Quick and dirty GitHub OAuth2 implementation using express and express-session. Express-session is not scalable seemingly by design. Sessions are stored in server memory with no overflow control like an LRU Cache. For scalability's sake, probably better to use a redis store or a file-based session store in a similar fashion as Apache Server.
-####Setup:
+Quick and dirty GitHub OAuth2 implementation using express and express-session. Express-session is not scalable seemingly by design. ~~Sessions are stored in server memory with no overflow control like an LRU Cache.~~  
+Implemented FileStore for session storage on [this commit](https://github.com/Daniel-Edminster/challenges/commit/7c9083476adc4beb71b6aedb9ef233f01f73ac07).
+
+~~For scalability's sake, probably better to use a redis store or a file-based session store in a similar fashion as Apache Server.~~
+
+#### Setup:
 ```
 git clone https://github.com/Daniel-Edminster/challenges
 ```
