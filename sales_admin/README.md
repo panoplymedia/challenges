@@ -62,7 +62,9 @@ npm install
 ```
 You'll need to edit `challenges/sales_admin/server/config.example.js` to get started.
 This application uses GitHub for Authentication, so you'll need to setup an OAuth app [here](https://github.com/settings/applications/new), with the following credentials:
+
 **Homepage URL**: `http://localhost:3000`
+
 **Authorization callback URL**: `http://localhost:8080/auth/github/callback`
 
 Modify the contents of `config.example.js`:
