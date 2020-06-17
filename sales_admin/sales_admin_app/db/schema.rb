@@ -22,10 +22,15 @@ ActiveRecord::Schema.define(version: 2020_06_16_161409) do
   end
 
   create_table "items", force: :cascade do |t|
+    t.bigint "merchant_id"
+    t.bigint "customer_id"
     t.decimal "price", precision: 10, scale: 2
+    t.integer "quantity"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_items_on_customer_id"
+    t.index ["merchant_id"], name: "index_items_on_merchant_id"
   end
 
   create_table "merchants", force: :cascade do |t|

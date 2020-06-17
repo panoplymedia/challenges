@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from "react";
+import Header from './components/header'
+import Login from './components/login'
+import RegistrationForm from './components/registrationForm'
+import SalesData from './components/salesData'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+
 import './App.css';
 
-function App() {
+function App(props) {
+  const [updateErrorMessage, setUser] = useState(null);  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <Switch>
+          <Route path="/" exact={true}>
+            <RegistrationForm showError={updateErrorMessage} />
+          </Route>
+
+          <Route path="/register">
+            <RegistrationForm
+              showError={updateErrorMessage}
+            />
+          </Route>
+
+          <Route path="/login">
+            <Login
+              showError={updateErrorMessage}
+              setUser={setUser}
+            />
+          </Route>
+
+          <Route path="/home">
+            <SalesData />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

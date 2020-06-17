@@ -1,12 +1,14 @@
 class ApplicationController < ActionController::API
-  include ::ActionController::Cookies
+  include ActionController::ImplicitRender
+  include ActionController::MimeResponds
+  include ActionView::Layouts
 
   def not_found
     render json: { error: 'not_found' }
   end
 
   def authorize_request
-    jwt = cookies.signed[:jwt]
+    jwt = request.headers['Authorization']
     begin
       @decoded = JsonWebToken.decode(jwt)
       @current_user = User.find(@decoded[:user_id])
