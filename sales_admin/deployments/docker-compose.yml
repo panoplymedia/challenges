@@ -1,0 +1,57 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    networks:
+      - megaphone
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: psql -U postgres -c '\q'
+    ## Could add a volume here to prevent wiping out the entire database every time we start.
+
+  migrate:
+    build:
+      context: ./
+      dockerfile: ./build/database/migrate.Dockerfile
+    volumes:
+      - ./build/database/migrations:/migrations
+    networks:
+      - megaphone
+    command: postgres -path=/migrations/ -database postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432?sslmode=disable&connect_timeout=100 up
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    depends_on:
+      - postgres
+
+  service:
+    build:
+      context: ./
+      dockerfile: ./build/server/Dockerfile
+    volumes:
+      - ./web/css:/srv/assets/css
+      - ./web/templates:/srv/templates
+    ports:
+      - 8888:80
+    command: [
+      "-listen-address", ":80",
+      "-db-configs", "user=postgres password=test host=postgres port=5432 database=postgres sslmode=disable",
+      "-static-files", "/srv/assets",
+      "-templates", "/srv/templates/*.html",
+      "-log-level", "INFO"
+    ]
+    networks:
+      - megaphone
+    depends_on:
+      - migrate
+      - postgres
+
+      
+
+networks:
+  megaphone:
+
+      
+

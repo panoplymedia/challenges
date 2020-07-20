@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+host=$1
+shift
+flags="$@"
+
+
+until PGPASSWORD=${POSTGRES_PASSWORD} psql -h "$host" -U "postgres" -c '\q'; do
+    >&2 echo "Postgres is unvailable - sleeping"
+    sleep 1
+done
+
+migrate $flags

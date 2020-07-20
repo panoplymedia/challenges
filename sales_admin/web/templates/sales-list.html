@@ -1,0 +1,63 @@
+{{ define "sales-list" }}
+    <html>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="/assets/css/sales-admin.css">
+        
+        <body>
+            <h1 class="header">Sales Admin</h1>
+            <div class="upload">
+                <form action="/sales/upload" method="POST" enctype="multipart/form-data">
+                    <input name="file" type="file" id="file-input" onchange="form.submit()" style="display:none"/>
+                    <label for="file-input" class="pure-button">Upload CSV</label>
+                </form>
+            </div>
+            {{ with $data := . }}
+                {{ with $data.Sales }}
+                    <div class="total">
+                        <h2>Total Revenue: {{ printf "$%.2f" $data.TotalRevenue }}</h2>
+                    </div>
+                    <div>
+                        <table class="sales-data pure-table pure-table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Customer Name
+                                    </th>
+                                    <th>
+                                        Item Description
+                                    </th>
+                                    <th>
+                                        Item Price
+                                    </th>
+                                    <th>
+                                        Quantity
+                                    </th>
+                                    <th>
+                                        Merchant Name
+                                    </th>
+                                    <th>
+                                        Merchant Address
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $sale := $data.Sales }}
+                                    <tr>
+                                        <td>{{$sale.Customer}}</td>
+                                        <td>{{$sale.Item.Description}}</td>
+                                        <td>{{$sale.Item.Price}}</td>
+                                        <td>{{$sale.Quantity}}</td>
+                                        <td>{{$sale.Merchant.Name}}</td>
+                                        <td>{{$sale.Merchant.Address}}</td>
+                                    </tr>
+                                {{ end  }}
+                            </tbody>
+                        </table>
+                    </div>
+                {{ else }}
+                    <div class="no-data"><h2>No data</h2></div>
+                {{ end }}
+            {{ end }}
+        </body>
+    </html>
+{{end}}
