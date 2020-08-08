@@ -1,0 +1,14 @@
+{
+    "mappings": {
+            "properties": {
+            "date": { "type": "text" },
+            "timestamp": { "type": "text" },
+            "ip_address": { "type": "text" },
+            "user_agent": { "type": "text" },
+            "request": { "type": "text" },
+            "status": { "type": "integer" },
+            "min_byte": { "type": "integer" },
+            "max_byte": { "type": "integer" }
+        }
+    }
+}

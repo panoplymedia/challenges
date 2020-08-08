@@ -1,0 +1,51 @@
+{
+  "took" : 16,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 2,
+      "relation" : "eq"
+    },
+    "max_score" : 20.44674,
+    "hits" : [
+      {
+        "_index" : "logs",
+        "_type" : "_doc",
+        "_id" : "LNUyznMBFJNLFNzOIRqe",
+        "_score" : 20.44674,
+        "_source" : {
+          "status" : 206,
+          "max_byte" : 278,
+          "user_agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+          "min_byte" : 0,
+          "date" : "2020-07-31",
+          "timestamp" : "13:05:39",
+          "ip_address" : "208.27.169.249",
+          "request" : "/cd6d50fd-ada7-45da-9d5f-d59694f52be7"
+        }
+      },
+      {
+        "_index" : "logs",
+        "_type" : "_doc",
+        "_id" : "CNUyznMBFJNLFNzOISyr",
+        "_score" : 20.44674,
+        "_source" : {
+          "status" : 206,
+          "max_byte" : 556,
+          "user_agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+          "min_byte" : 278,
+          "date" : "2020-07-31",
+          "timestamp" : "14:22:09",
+          "ip_address" : "208.27.169.249",
+          "request" : "/cd6d50fd-ada7-45da-9d5f-d59694f52be7"
+        }
+      }
+    ]
+  }
+}

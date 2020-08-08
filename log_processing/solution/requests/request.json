@@ -1,0 +1,59 @@
+{
+    "query": {
+        "bool": {
+            "should": [
+                {
+                    "match": {
+                        "status": {
+                            "query": 200
+                        }
+                    }
+                },
+                {
+                    "match": {
+                        "status": {
+                            "query": 206
+                        }
+                    }
+                }
+            ],
+            "must": [
+                {
+                    "match": {
+                        "ip_address": {
+                            "query": "208.27.169.249"
+                        }
+                    }
+                },
+                {
+                    "match": {
+                        "user_agent": {
+                            "query": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
+                        }
+                    }
+                },
+                {
+                    "match": {
+                        "request": {
+                            "query": "/cd6d50fd-ada7-45da-9d5f-d59694f52be7"
+                        }
+                    }
+                },
+                { 
+                    "range": { 
+                        "min_byte": { 
+                            "lte": 500
+                        }
+                    }
+                },
+                { 
+                    "range": { 
+                        "max_byte": { 
+                            "gte": 150
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
