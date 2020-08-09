@@ -58,7 +58,7 @@ The query represents a request of whether bytes 150-500 were delivered to the ip
 
 An algorithm to check whether the returned sequence of bytes is continuous and whose min < 150 and max > 500 would return the desired result.  In the above case it is clear that bytes 344-467 were missed, and so a query for bytes 150-500 would return False.
 
-> **Note**: the script `requests/mock_client` simulates the response of a client based on the byte ranges returned in the above table. The script takes two arguments, the minimum value of the byte range query, and the maximum value of the byte range query. For instance, `python mock_client.py 150-500`. 
+> **Note**: the script `requests/mock_client` simulates the response of a client based on the byte ranges returned in the above table. The script takes two arguments, the minimum value of the byte range query, and the maximum value of the byte range query. For instance, `python mock_client.py 150 500`. 
 
 # Log Processing Project Discussion
 
