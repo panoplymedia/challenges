@@ -25,6 +25,8 @@ These tests are minimal, but meant to show how a script/app like this can be uni
 
 ### Execution
 
+The file `parser.py` contains the code that does the processing.
+
 The filepath to the log file to process must be passed in as an argument to the python script `parser.py`. (e.g. `python parser.py sample.log`). This filepath can be relative or absolute.
 
 An optional path to an output file can be passed in as a second argument (e.g. `python parser.py sample.log sample_output.json`).  This will generate an output file that can be used for ingestion into elasticsearch using the bulk API. The output file type should be `.json`. If this argument is not passed in, the output will be sent to the console.
@@ -49,10 +51,14 @@ The query represents a request of whether bytes 150-500 were delivered to the ip
 
 | record id | max byte | max byte |
 |-----------|----------|----------|
-| 1         |112       |344       |
-| 2         |467       |515       |
+| 1         |112       |149       |
+| 2         |149       |224       |
+| 3         |224       |344       |
+| 4         |467       |515       |
 
-An algorithm to check whether the returned sequence of bytes is continuous and whose min < 150 and max > 500 would return the desired result.
+An algorithm to check whether the returned sequence of bytes is continuous and whose min < 150 and max > 500 would return the desired result.  In the above case it is clear that bytes 344-467 were missed, and so a query for bytes 150-500 would return False.
+
+> **Note**: the script `requests/mock_client` simulates the response of a client based on the byte ranges returned in the above table. The script takes two arguments, the minimum value of the byte range query, and the maximum value of the byte range query. For instance, `python mock_client.py 150-500`. 
 
 # Log Processing Project Discussion
 
