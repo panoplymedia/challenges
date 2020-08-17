@@ -18,7 +18,7 @@ A sample log file is provided in the current directory.
 
 ## Delivery requirements
 
-Please provide code for processing the log files, along with documentation or discussion of any platforms, technologies, etc. that you may use in a production solution. An ideal solution will provide an output format where a user can easily query specific byte ranges for specific assets.
+Please provide code for processing the log files, along with documentation or discussion of any platforms, technologies, etc. that you may use in a production solution. An ideal solution will provide an output format where a user can easily query specific byte ranges for specific assets. For example, the user should be able to query whether the entire file was downloaded for a given file, IP address, and user agent.
 
 Think about things like:
 
