@@ -1,4 +1,5 @@
-# date	timestamp	ip_address	user_agent	request	status	byte_range2020-07-31	16:46:07	63.110.194.22	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0	/6d8a9754-e8c7-4193-8491-58b2122c1c10	206	0-289
+# date	timestamp	ip_address	user_agent	request	status	byte_range
+2020-07-31	16:46:07	63.110.194.22	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0	/6d8a9754-e8c7-4193-8491-58b2122c1c10	206	0-289
 2020-07-31	12:46:09	95.142.72.8	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0	/734f46f2-4e54-4f1a-80b4-15abb8220eaf	206	0-362
 2020-07-31	12:46:11	17.164.224.223	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0	/92e2666d-fc50-457a-95ba-58ac268eac48	206	0-400
 2020-07-31	12:46:11	208.27.169.249	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36	/6d8a9754-e8c7-4193-8491-58b2122c1c10	206	0-289
