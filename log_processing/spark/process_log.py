@@ -66,7 +66,7 @@ def filter_invalid_status(df):
   :param df: A logfile dataframe
   :type df: Dataframe
   """
-  return df.where(df['status'].isin(VALID_STATUSES))
+  return df.where(f.col('status').isin(VALID_STATUSES))
 
 def build_epoch(df):
   """
