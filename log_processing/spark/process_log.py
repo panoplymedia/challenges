@@ -7,6 +7,7 @@ from pyspark.sql.types import (ArrayType, DateType, IntegerType, LongType,
                                StringType, StructType, StructField)
 
 PARQUET_PATH = '/data/parquet'
+DELIVERY_LOG_PATH = '/repo/sample.log'
 
 VALID_STATUSES = [200, 206]
 
@@ -16,9 +17,9 @@ def parse_args():
   """
   parser = argparse.ArgumentParser(description='Process delivery logs')
 
-  parser.add_argument('log_file',
+  parser.add_argument('--log_file',
                       type=str,
-                      metavar='log_file',
+                      default=DELIVERY_LOG_PATH,
                       help="The delivery log file to process")
 
   parser.add_argument('--parquet_path',
