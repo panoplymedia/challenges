@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Launch process_pagecounts inside a docker container
+# Launch pytest inside a docker container
 docker run \
   --rm \
   -v $PWD:/repo \

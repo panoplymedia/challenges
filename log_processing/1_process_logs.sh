@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Launch update_languages inside a docker container
+# Launch process_log inside a docker container
 docker run \
   --rm \
   -v $PWD:/repo \
