@@ -4,8 +4,6 @@ import os
 import hashlib
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
-from pyspark.sql.types import (ArrayType, DateType, IntegerType, LongType,
-                               StringType, StructType, StructField)
 
 PARQUET_PATH = '/data/parquet'
 

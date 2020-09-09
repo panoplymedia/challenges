@@ -2,8 +2,6 @@ import pytest
 import os
 from pyspark.sql import functions as f
 from pyspark.sql import Row
-from pyspark.sql.types import (DateType, IntegerType, LongType, StringType,
-                               StructField, StructType)
 from .. import process_log as pl
 
 
