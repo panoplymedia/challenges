@@ -11,12 +11,12 @@ def parse_args():
   """
   Parse the command line arguments and return them.
   """
-  parser = argparse.ArgumentParser(description='Process delivery logs')
+  parser = argparse.ArgumentParser(description='Query delivery data')
 
   parser.add_argument('--parquet_path',
                       type=str,
                       default=PARQUET_PATH,
-                      help="The path in which to write the parquet data")
+                      help="The path from which to read the parquet data")
 
   parser.add_argument('--ip',
                       type=str,
@@ -105,7 +105,7 @@ if __name__ == '__main__':
   logging.basicConfig(level=logging.INFO,
                       format='%(asctime)s %(levelname)s - %(message)s')
 
-  # Setup out spark session in local mode
+  # Setup our spark session in local mode
   spark = SparkSession.builder\
       .master("local[*]")\
       .appName("check_delivery")\

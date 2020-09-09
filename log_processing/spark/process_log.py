@@ -153,7 +153,7 @@ if __name__ == '__main__':
   logging.basicConfig(level=logging.INFO,
                       format='%(asctime)s %(levelname)s - %(message)s')
 
-  # Setup out spark session in local mode
+  # Setup our spark session in local mode
   spark = SparkSession.builder\
       .master("local[*]")\
       .appName("process_logs")\
