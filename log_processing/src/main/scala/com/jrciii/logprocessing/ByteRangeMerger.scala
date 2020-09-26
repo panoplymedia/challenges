@@ -1,8 +1,11 @@
 package com.jrciii.logprocessing
 
+/**
+  * This object contains the function to merge byte ranges.
+  */
 object ByteRangeMerger {
   /**
-    * Merges delivered byte ranges. Assumes ranges are sorted by start byte and end byte, ascending.
+    * Merges delivered byte ranges. Assumes incoming ranges are sorted by start byte and end byte, ascending.
     * @param ranges The byte ranges for each ipAddress, userAgent and request to merge.
     * @return Merged ranges. If there is more than one range, gaps have occurred.
     */
