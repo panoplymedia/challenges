@@ -6,6 +6,10 @@ version := "0.0.1"
 
 scalaVersion := "2.12.12"
 
+scalacOptions += "-target:jvm-1.8"
+
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
+
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.0.1"
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % "3.0.1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
