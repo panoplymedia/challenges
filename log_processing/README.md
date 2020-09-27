@@ -11,7 +11,7 @@ to determine complete or incomplete delivery of bytes. The demo process consists
 4. Merge these successful byte ranges. For example this group of ranges: (0-100) and (50-200) will become: (0-200)
     If the file is 200 bytes, this represents a complete delivery. This group of ranges: (0-100), (50-200), (300-400), (350-500)
     will become (0-200) and (300-500). Since there are multiple ranges, this represents a gap, or an incomplete delivery.
-5. Allow the user to query the merged byte ranges.
+5. Allow the user to query the merged byte ranges stored in the Memory sink.
 
 ## Installation And Running
 To install, sbt is required. cd into log_processing and run `sbt assembly`. Then run the jar, supplying the directory to your CSV with byte range requests
@@ -25,7 +25,7 @@ You can query the dataset by entering Spark SQL at the prompt and hitting enter.
 To exit, type 'quit'
 
 ## Querying the byte ranges
-After starting the application, wait for the "> " prompt to appear. Then enter your query. Type 'quit' to exit.
+After starting the application, wait for the "> " prompt to appear. Then enter your Spark SQL query. Type 'quit' to exit.
 
 To check if a file was completely delivered, check if that combination of ipAddress, userAgent, request has only one
 byte range starting at 0 and ending with the file size. If a row is returned, the file was delivered successfully.
