@@ -26,7 +26,7 @@ object ByteRangeMergerApp extends App {
   // Wait for the CSV processing to finish
   stream.processAllAvailable()
 
-  // Execute Spark SQL on the stream until the user enters 'quit'
+  // Execute user supplied Spark SQL on the stream until the user enters 'quit'
   Iterator
     .continually({
       print("> ")
