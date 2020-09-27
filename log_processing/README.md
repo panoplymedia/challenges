@@ -70,7 +70,9 @@ only showing top 20 rows
 
 ## How Would This App Look And Scale In Production
 In production, this app would be changed to stream from a distributed source such as S3 or Kafka, and write to one or more 
-sinks such as ElasticSearch and S3. The Spark app itself could run on EMR.
+sinks such as ElasticSearch and S3.
+There would be a separate application to query the output sink for delivery statuses, such as a microservice that queries ElasticSearch.
+The Spark app itself could run on EMR.
 
 To improve scaling, determining how far back in time we need to keep requests to merge to determine successful delivery would help.
 Old requests would get dropped from memory. This demo app does not consider the timestamp when aggregating.
