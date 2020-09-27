@@ -1,6 +1,6 @@
 # Log Processing
 
-## Background
+## Overview
 
 This application demonstrates the use of Spark Structured Streaming to process streaming byte range requests in order
 to determine complete or incomplete delivery of bytes. The demo process consists of:
