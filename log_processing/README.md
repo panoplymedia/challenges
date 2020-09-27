@@ -21,7 +21,7 @@ sbt assembly
 java -jar target\scala-2.12\log_processing-assembly-0.0.1.jar "C:\Users\You\code\challenges\log_processing\src\test\resources\sample"
 ```
 Some Spark output will be displayed. Wait for the input prompt to appear. It looks like "> ".
-You can query the dataset by entering Spark SQL at the prompt and hitting enter. The table to select from is 'delivered'. 
+You can query the dataset by entering Spark SQL queries at the prompt and hitting enter. The table to select from is 'delivered'. 
 To exit, type 'quit'
 
 ## Querying the byte ranges
