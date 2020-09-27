@@ -47,7 +47,7 @@ byte range starting at 0 and ending with the file size. If a row is returned, th
 +------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
 ```
 
-To get some requests with gaps, try this query:
+To get some requests with gaps, try this query, which checks if byteRanges has more than one range:
 ```
 > select * from delivered where size(byteRanges) > 1
 +---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
