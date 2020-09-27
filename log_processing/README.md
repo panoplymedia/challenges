@@ -77,6 +77,37 @@ To get some requests with gaps, try this query:
 only showing top 20 rows
 ```
 
+To check if a specific range has been delivered, check if byteRanges has a range that starts on or before and ends on or after the range in question:
+```
+> select * from delivered where exists(byteRanges, range -> range.start <= 200 AND range.end >= 1000)
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+|ipAddress      |userAgent                                                                                                                                    |request                              |byteRanges               |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+|136.198.201.30 |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/566e5232-72f1-4a70-aa89-6e8adfb5a73f|[[0, 1261]]              |
+|86.97.94.241   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/32668757-95c0-4ded-9b81-71607a644e92|[[0, 1741]]              |
+|184.225.171.105|Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/921fa9d7-79c3-4758-bb7c-76110cb21187|[[0, 1526]]              |
+|244.98.100.197 |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1536]]              |
+|59.195.29.172  |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/734f46f2-4e54-4f1a-80b4-15abb8220eaf|[[0, 1810]]              |
+|106.220.65.54  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1077], [1436, 1795]]|
+|82.138.120.105 |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/566e5232-72f1-4a70-aa89-6e8adfb5a73f|[[0, 1008]]              |
+|109.105.242.37 |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/92e2666d-fc50-457a-95ba-58ac268eac48|[[0, 1200]]              |
+|203.144.189.112|Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/734f46f2-4e54-4f1a-80b4-15abb8220eaf|[[0, 1810]]              |
+|53.150.234.79  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1795]]              |
+|204.253.211.236|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/734f46f2-4e54-4f1a-80b4-15abb8220eaf|[[0, 1086]]              |
+|160.75.228.57  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/3ecee3e1-0b60-4cb5-b7d1-a606dd3e3f87|[[0, 1285]]              |
+|61.34.25.132   |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/734f46f2-4e54-4f1a-80b4-15abb8220eaf|[[0, 1086]]              |
+|157.52.254.164 |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/92e2666d-fc50-457a-95ba-58ac268eac48|[[0, 1200]]              |
+|212.174.126.172|Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1077]]              |
+|235.42.96.54   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/921fa9d7-79c3-4758-bb7c-76110cb21187|[[0, 1525]]              |
+|106.220.65.54  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/734f46f2-4e54-4f1a-80b4-15abb8220eaf|[[0, 1810]]              |
+|14.99.120.201  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1795]]              |
+|33.235.254.140 |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/6d8a9754-e8c7-4193-8491-58b2122c1c10|[[0, 1446]]              |
+|31.169.133.201 |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1436]]              |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+only showing top 20 rows
+
+```
+
 ## How Would This App Look And Scale In Production
 In production, this app would be changed to stream from a distributed source such as S3 or Kafka, and write to one or more 
 sinks such as ElasticSearch and S3.
