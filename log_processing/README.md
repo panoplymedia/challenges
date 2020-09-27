@@ -2,28 +2,45 @@
 
 ## Background
 
-You are managing a content delivery network, and a customer is questioning whether all of an asset is being delivered to a particular IP address and user agent.
+This application demonstrates the use of Spark Structured Streaming to process streaming byte range requests in order
+to determine complete or incomplete delivery of bytes. The demo process consists of:
 
-The assets in question are primarily delivered via range requests, so you'll need to efficiently process the log lines and the byte range in each line to determine which bytes are actually being delivered.
+1. Stream from a folder containing CSV files of byte range requests
+2. Reject any requests without a status of 200 or 206
+3. Group requests by ip, user agent and request path
+4. Merge these successful byte ranges. For example this group of ranges: (0-100) and (50-200) will become: (0-200)
+    If the file is 200 bytes, this represents a complete delivery. This group of ranges: (0-100), (50-200), (300-400), (350-500)
+    will become (0-200) and (300-500). Since there are multiple ranges, this represents a gap, or an incomplete delivery.
+5. Allow the user to query the merged byte ranges.
 
-## Functional requirements
+## Installation And Running
+To install, sbt is required. cd into log_processing and run `sbt assembly`. Then run the jar, supplying the directory to your CSV with byte range requests
+```
+cd log_processing
+sbt assembly
+java -jar target\scala-2.12\log_processing-assembly-0.0.1.jar "C:\Users\You\code\challenges\log_processing\src\test\resources\sample"
+```
+Some Spark output will be displayed. Wait for the input prompt to appear. It looks like "> ".
+You can query the dataset by entering Spark SQL at the prompt and hitting enter.
+To exit, type 'quit'
 
-Your solution will need to be able to calculate whether every byte within a specific byte range for an asset is delivered to a given IP address and user agent. The assets will be identified by the request path in the log line. Requests for different assets will be interspersed within the log file. Only requests with HTTP status of 200 or 206 should be counted.
+## Querying the byte ranges
+After starting the application, wait for the "> " prompt to appear. Then enter your query. Type 'quit' to exit.
 
-For example, given a 1000 byte file, the range requests may be something like 0-200 bytes, 200-400 bytes, etc. In this scenario, if the customer asks whether bytes 0-150 were delivered, the answer is yes.
+To check if a file was completely delivered, check if that combination of ipAddress, userAgent, request has only one
+byte range starting at 0 and ending with the file size.
+```
+> select * from delivered where ipAddress='183.3.129.45' AND userAgent='Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1' AND request='/32668757-95c0-4ded-9b81-71607a644e92' AND byteRanges=array(named_struct('start', 0, 'end', 1741))
++------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
+|ipAddress   |userAgent                                                                                                                                    |request                              |byteRanges |
++------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
+|183.3.129.45|Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/32668757-95c0-4ded-9b81-71607a644e92|[[0, 1741]]|
++------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
+```
 
-However, in some cases the range requests may skip a segment of the asset, going from byte 400 to request bytes 500-600. In this scenario, if the customer asks whether bytes 401 to 550 were delivered, the answer is no, because not all bytes in that range were delivered.
+## How Would This App Look And Scale In Production
+In production, this app would be changed to stream from a distributed source such as S3 or Kafka, and write to one or more 
+sinks such as ElasticSearch and S3. The Spark app itself could run on EMR.
 
-A sample log file is provided in the current directory.
-
-## Delivery requirements
-
-Please provide code for processing the log files, along with documentation or discussion of any platforms, technologies, etc. that you may use in a production solution. The submission should include instructions for installation and execution. An ideal solution will provide an output format where a user can easily query specific byte ranges for specific assets. For example, the user should be able to query whether the entire file was downloaded for a given file, IP address, and user agent.
-
-Think about things like:
-
-* Testing
-* How to store the data
-* How would your solution differ if it had to scale?
-
-Please submit your solution as a pull request, or package it up and send it to doug.ramsay@megaphone.fm.
+To improve scaling, determining how far back in time we need to keep requests to merge to determine successful delivery would help.
+Old requests would get dropped from memory. This demo app does not consider the timestamp when aggregating.
