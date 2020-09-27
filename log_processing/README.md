@@ -14,10 +14,19 @@ to determine complete or incomplete delivery of bytes. The demo process consists
 5. Allow the user to query the merged byte ranges stored in the Memory sink.
 
 ## Installation And Running
-To install, sbt is required. cd into log_processing and run `sbt assembly`. Then run the jar, supplying the directory to your CSV with byte range requests
+To build from the source, sbt is required. Alternatively you can download a prebuilt jar here https://github.com/jrciii/challenges/releases/download/my-solution/log_processing-assembly-0.0.1.jar
+
+### Building with sbt
+cd into log_processing and run `sbt assembly`. Then run the jar, supplying the directory to your CSV with byte range requests
 ```
 cd log_processing
 sbt assembly
+```
+
+### Running
+To run the jar, use the java command, specify the jar and the full path to the directory containing the CSV files with 
+the byte range requests.
+```
 java -jar target\scala-2.12\log_processing-assembly-0.0.1.jar "C:\Users\You\code\challenges\log_processing\src\test\resources\sample"
 ```
 Some Spark output will be displayed. Wait for the input prompt to appear. It looks like "> ".
