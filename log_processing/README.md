@@ -21,14 +21,14 @@ sbt assembly
 java -jar target\scala-2.12\log_processing-assembly-0.0.1.jar "C:\Users\You\code\challenges\log_processing\src\test\resources\sample"
 ```
 Some Spark output will be displayed. Wait for the input prompt to appear. It looks like "> ".
-You can query the dataset by entering Spark SQL at the prompt and hitting enter.
+You can query the dataset by entering Spark SQL at the prompt and hitting enter. The table to select from is 'delivered'. 
 To exit, type 'quit'
 
 ## Querying the byte ranges
 After starting the application, wait for the "> " prompt to appear. Then enter your query. Type 'quit' to exit.
 
 To check if a file was completely delivered, check if that combination of ipAddress, userAgent, request has only one
-byte range starting at 0 and ending with the file size.
+byte range starting at 0 and ending with the file size. If a row is returned, the file was delivered successfully.
 ```
 > select * from delivered where ipAddress='183.3.129.45' AND userAgent='Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1' AND request='/32668757-95c0-4ded-9b81-71607a644e92' AND byteRanges=array(named_struct('start', 0, 'end', 1741))
 +------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
@@ -36,6 +36,36 @@ byte range starting at 0 and ending with the file size.
 +------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
 |183.3.129.45|Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/32668757-95c0-4ded-9b81-71607a644e92|[[0, 1741]]|
 +------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-----------+
+```
+
+To get some requests with gaps, try this query:
+```
+> select * from delivered where size(byteRanges) > 1
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+|ipAddress      |userAgent                                                                                                                                    |request                              |byteRanges               |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+|106.220.65.54  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 1077], [1436, 1795]]|
+|228.122.181.108|Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/566e5232-72f1-4a70-aa89-6e8adfb5a73f|[[0, 504], [1008, 1260]] |
+|14.98.169.176  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/92e2666d-fc50-457a-95ba-58ac268eac48|[[0, 400], [800, 1600]]  |
+|71.95.75.219   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/32668757-95c0-4ded-9b81-71607a644e92|[[0, 696], [1044, 1741]] |
+|228.93.19.159  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/968687c0-3efd-4ae5-aeec-9d4ac5e1598e|[[0, 872], [1090, 1092]] |
+|249.94.28.246  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 718], [1077, 1795]] |
+|94.230.87.124  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/cd6d50fd-ada7-45da-9d5f-d59694f52be7|[[0, 556], [834, 1112]]  |
+|133.15.230.36  |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/6d8a9754-e8c7-4193-8491-58b2122c1c10|[[0, 578], [867, 1156]]  |
+|141.239.177.203|Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/ea65704e-6829-4871-a92a-5f0c3b80addf|[[0, 633], [844, 1057]]  |
+|4.254.102.152  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/921fa9d7-79c3-4758-bb7c-76110cb21187|[[305, 610], [915, 1525]]|
+|55.28.147.17   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/968687c0-3efd-4ae5-aeec-9d4ac5e1598e|[[0, 436], [654, 872]]   |
+|109.132.83.87  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/6d8a9754-e8c7-4193-8491-58b2122c1c10|[[0, 289], [578, 867]]   |
+|109.72.52.215  |Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/c66c0276-3cc2-47f9-a5ae-42954421a4b1|[[0, 718], [1077, 1795]] |
+|97.75.45.253   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/32668757-95c0-4ded-9b81-71607a644e92|[[0, 1044], [1392, 1741]]|
+|196.204.201.103|Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0                                                               |/968687c0-3efd-4ae5-aeec-9d4ac5e1598e|[[0, 654], [872, 1090]]  |
+|26.216.213.231 |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/92e2666d-fc50-457a-95ba-58ac268eac48|[[0, 400], [800, 1600]]  |
+|182.122.91.54  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/566e5232-72f1-4a70-aa89-6e8adfb5a73f|[[0, 504], [756, 1008]]  |
+|71.95.75.219   |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/cd6d50fd-ada7-45da-9d5f-d59694f52be7|[[0, 556], [834, 1390]]  |
+|153.116.196.14 |Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36                           |/6d8a9754-e8c7-4193-8491-58b2122c1c10|[[0, 867], [1156, 1446]] |
+|182.122.91.54  |Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1|/ea65704e-6829-4871-a92a-5f0c3b80addf|[[0, 311], [522, 1057]]  |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+-------------------------+
+only showing top 20 rows
 ```
 
 ## How Would This App Look And Scale In Production
