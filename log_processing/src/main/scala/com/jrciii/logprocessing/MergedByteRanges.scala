@@ -11,4 +11,4 @@ package com.jrciii.logprocessing
 case class MergedByteRanges(ipAddress: String,
                             userAgent: String,
                             request: String,
-                            byteRanges: Seq[(Int, Int)])
+                            byteRanges: Seq[ByteRange])

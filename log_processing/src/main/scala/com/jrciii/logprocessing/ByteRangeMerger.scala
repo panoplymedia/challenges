@@ -13,17 +13,17 @@ object ByteRangeMerger {
     val (ipAddress, userAgent, request, byteRanges) = ranges
     byteRanges.headOption.map(first => {
       val (accumulatedMerges, finalRange) =
-        byteRanges.tail.foldLeft((Vector[(Int, Int)](), first))((accumulated, newRange) => {
-          val (start, end) = newRange
+        byteRanges.tail.foldLeft((Vector[ByteRange](), ByteRange(start = first._1, end = first._2)))((accumulated, newRange) => {
+          val (newStart, newEnd) = newRange
           val previouslyMerged = accumulated._1
           val currentRange = accumulated._2
           // If the new range starts before or on the previous range's end, merge the range
-          if (start <= currentRange._2)
-            (previouslyMerged, (currentRange._1, Math.max(currentRange._2, end)))
+          if (newStart <= currentRange.end)
+            (previouslyMerged, ByteRange(currentRange.start, Math.max(currentRange.end, newEnd)))
           // Otherwise add that range to the list of merged ranges and start a new round of merging
           // with the latest range
           else
-            (previouslyMerged :+ currentRange, newRange)
+            (previouslyMerged :+ currentRange, ByteRange(newStart, newEnd))
         })
       MergedByteRanges(ipAddress, userAgent, request, accumulatedMerges :+ finalRange)
     })

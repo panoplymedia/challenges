@@ -15,14 +15,14 @@ class ByteRangeStreamManagerSpec extends FlatSpec with Matchers {
     ipAddress = "183.3.129.45",
     userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1",
     request="/32668757-95c0-4ded-9b81-71607a644e92",
-    byteRanges = Seq((0, 1741)))
+    byteRanges = Seq(ByteRange(0, 1741)))
 
   val expectedIncompleteRange = MergedByteRanges(
     ipAddress = "182.122.91.54",
     userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) " +
       "CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1",
     request = "/ea65704e-6829-4871-a92a-5f0c3b80addf",
-    byteRanges = Seq((0, 311), (522, 1057)))
+    byteRanges = Seq(ByteRange(0, 311), ByteRange(522, 1057)))
 
   private def testSql(expectedRange: MergedByteRanges) =
     s"select * from delivered where ipAddress='${expectedRange.ipAddress}' " +

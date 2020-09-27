@@ -13,11 +13,11 @@ import scala.io.StdIn
   *   > select * from delivered where size(ranges) > 1
   *
   *   To see if a request was completely delivered, select for an ipAddress, userAgent, and request and check if
-  *   byteRanges is a single range:
+  *   byteRanges is a single range, starting at 0 and ending with the file size. This example uses a file of size 1741:
   *
   *   > select * from delivered where ipAddress='183.3.129.45' AND userAgent='Mozilla/5.0 (iPhone; CPU iPhone OS 13_6
   *   like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1' AND
-  *   request='/32668757-95c0-4ded-9b81-71607a644e92' AND byteRanges=array(named_struct('_1', 0, '_2', 1741))
+  *   request='/32668757-95c0-4ded-9b81-71607a644e92' AND byteRanges=array(named_struct('start', 0, 'end', 1741))
   */
 object ByteRangeMergerApp extends App {
   // Start the stream, reading from the CSV path provided by the command line arguments
