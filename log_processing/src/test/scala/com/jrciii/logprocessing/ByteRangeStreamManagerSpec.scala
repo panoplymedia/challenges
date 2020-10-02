@@ -13,7 +13,8 @@ class ByteRangeStreamManagerSpec extends FlatSpec with Matchers {
 
   val expectedCompleteRange = MergedByteRanges(
     ipAddress = "183.3.129.45",
-    userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1",
+    userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) " +
+      "CriOS/83.0.4147.71 Mobile/15E148 Safari/604.1",
     request="/32668757-95c0-4ded-9b81-71607a644e92",
     byteRanges = Seq(ByteRange(0, 1741)))
 

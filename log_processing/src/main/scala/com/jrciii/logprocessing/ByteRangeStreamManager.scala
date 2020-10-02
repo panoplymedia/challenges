@@ -15,7 +15,8 @@ object ByteRangeStreamManager {
     * @return The current Spark Session
     */
   def createSparkSession: SparkSession = {
-    val spark = SparkSession.builder().appName("Byte Range Delivery Merger").master("local[2]").getOrCreate()
+    val spark =
+      SparkSession.builder().appName("Byte Range Delivery Merger").master("local[2]").getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
     spark
   }
@@ -41,8 +42,8 @@ object ByteRangeStreamManager {
       .selectExpr("ipAddress", "userAgent", "request", "cast(split(byteRange, '-')[0] as int) as startByte",
         "cast(split(byteRange, '-')[1] as int) as endByte")
       .groupBy("ipAddress", "userAgent", "request")
-      .agg(array_sort(collect_list(struct("startByte", "endByte")).as("ranges")))
-      .as[(String, String, String, Seq[(Int, Int)])]
+      .agg(array_sort(collect_list(struct("startByte", "endByte"))).as("byteRanges"))
+      .as[MergedByteRanges]
       .flatMap(ByteRangeMerger.mergeByteRanges)
   }
 
