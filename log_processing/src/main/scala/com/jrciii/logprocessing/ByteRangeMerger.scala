@@ -9,8 +9,8 @@ object ByteRangeMerger {
     * @param ranges The byte ranges for each ipAddress, userAgent and request to merge.
     * @return Merged ranges. If there is more than one range, gaps have occurred.
     */
-  def mergeByteRanges(ranges: MergedByteRanges): Option[MergedByteRanges] = {
-    ranges.byteRanges.headOption.map(first => {
+  def mergeByteRanges(ranges: MergedByteRanges): MergedByteRanges = {
+    ranges.byteRanges.headOption.fold(ranges)(first => {
       val (accumulatedMerges, finalRange) =
         ranges.byteRanges.tail.foldLeft((Vector[ByteRange](), first))((accumulated, newRange) => {
           val previouslyMerged = accumulated._1

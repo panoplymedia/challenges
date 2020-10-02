@@ -44,7 +44,7 @@ object ByteRangeStreamManager {
       .groupBy("ipAddress", "userAgent", "request")
       .agg(array_sort(collect_list(struct("startByte", "endByte"))).as("byteRanges"))
       .as[MergedByteRanges]
-      .flatMap(ByteRangeMerger.mergeByteRanges)
+      .map(ByteRangeMerger.mergeByteRanges)
   }
 
   /**
