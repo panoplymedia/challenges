@@ -1,0 +1,2 @@
+class Merchent < ApplicationRecord
+end
