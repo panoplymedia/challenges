@@ -6,11 +6,15 @@ class SalesUploadController < ApplicationController
 
     require 'csv'
 
-    table = CSV.parse(File.read(params[:csv].tempfile), headers: true)
+    file = params[:csv].tempfile
+
+    table = CSV.parse(File.read(file), headers: true)
 
     puts table.headers
 
     ActiveRecord::Base.transaction do
+
+      db_upload = Upload.create! filename: file
 
       table.each do |sale|
 
@@ -20,10 +24,10 @@ class SalesUploadController < ApplicationController
 
         item = Item.find_or_create_by(description: sale['Item Description'], price: sale['Item Price'], merchant: merchant)
 
-        sale = Sale.find_or_create_by(quantity: sale['Quantity'], customer: customer, item: item)
-
+        sale = Sale.find_or_create_by(quantity: sale['Quantity'], customer: customer, item: item, upload: db_upload)
       end
 
+      puts "Sales: #{db_upload.total_revenue}"
     end
 
     redirect_to root_path
