@@ -3,7 +3,7 @@ class CreateItems < ActiveRecord::Migration[6.0]
     create_table :items do |t|
       t.string :description
       t.string :price
-      t.references :merchent, null: false, foreign_key: true
+      t.references :merchant, null: false, foreign_key: true
 
       t.timestamps
     end

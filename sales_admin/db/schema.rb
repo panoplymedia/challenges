@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_07_161155) do
+ActiveRecord::Schema.define(version: 2020_10_08_054811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,21 +24,21 @@ ActiveRecord::Schema.define(version: 2020_10_07_161155) do
   create_table "items", force: :cascade do |t|
     t.string "description"
     t.string "price"
-    t.bigint "merchent_id", null: false
+    t.bigint "merchant_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["merchent_id"], name: "index_items_on_merchent_id"
+    t.index ["merchant_id"], name: "index_items_on_merchant_id"
   end
 
-  create_table "merchents", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "address", null: false
+  create_table "merchants", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "sales", force: :cascade do |t|
-    t.integer "quantity"
+    t.string "quantity"
     t.bigint "item_id", null: false
     t.bigint "customer_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2020_10_07_161155) do
     t.index ["item_id"], name: "index_sales_on_item_id"
   end
 
-  add_foreign_key "items", "merchents"
+  add_foreign_key "items", "merchants"
   add_foreign_key "sales", "customers"
   add_foreign_key "sales", "items"
 end
