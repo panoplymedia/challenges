@@ -1,6 +1,33 @@
+ruby:
+  uploads = Upload.last(5)
 
 .container
   h1 Sales Data
+  p Sales Data For ACME
+
+  h2 Recent Uploads
+
+  .uploads-body
+    table.table.table-hover.shadow
+      thead
+        tr
+          th
+          th File
+          th Time
+          th Revenue
+
+
+      -uploads.each do |upload|
+
+          tbody.user-info id="uid-#{upload.id}"
+            tr
+              td
+                svg.feather.feather-file-text fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="24" xmlns="http://www.w3.org/2000/svg"
+              td.p=upload.filename
+              td.p=upload.created_at
+              td.p=upload.total_revenue
+
+
   /! Trigger the modal with a button
   button.btn.btn-info.btn-lg data-target="#uploadModal" data-toggle="modal" type="button"  Upload File
   /! Modal

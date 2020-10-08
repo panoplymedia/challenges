@@ -6,15 +6,15 @@ class SalesUploadController < ApplicationController
 
     require 'csv'
 
-    file = params[:csv].tempfile
+    csv = params[:csv]
 
-    table = CSV.parse(File.read(file), headers: true)
+    table = CSV.parse(File.read(csv.tempfile), headers: true)
 
     puts table.headers
 
     ActiveRecord::Base.transaction do
 
-      db_upload = Upload.create! filename: file
+      db_upload = Upload.create! filename: csv.original_filename
 
       table.each do |sale|
 
