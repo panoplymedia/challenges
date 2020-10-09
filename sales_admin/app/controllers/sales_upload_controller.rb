@@ -25,7 +25,7 @@ class SalesUploadController < ApplicationController
         sale = Sale.find_or_create_by(quantity: sale['Quantity'], customer: customer, item: item, upload: db_upload)
       end
 
-      puts "Sales: #{db_upload.total_revenue}"
+      # puts "Sales: #{db_upload.total_revenue}"
     end
 
     redirect_to root_path
