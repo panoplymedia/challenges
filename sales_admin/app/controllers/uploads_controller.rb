@@ -1,6 +1,14 @@
-class SalesUploadController < ApplicationController
+class UploadsController < ApplicationController
+  before_action :set_upload, only: [:show, :destroy]
 
-  def upload
+  # GET /uploads
+  # GET /uploads.json
+  def index
+    @uploads = Upload.last(7)
+  end
+
+
+  def from_csv
 
     require 'csv'
 
@@ -31,9 +39,30 @@ class SalesUploadController < ApplicationController
     redirect_to root_path
   end
 
-  def overview
-    puts params[:id]
-    @upload = Upload.find(params[:id].to_i)
-    @sales = @upload.sales
+
+  def show
   end
+
+  def edit
+  end
+
+
+  def destroy
+    @upload.destroy
+    respond_to do |format|
+      format.html { redirect_to uploads_url, notice: 'Upload was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_upload
+      @upload = Upload.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def upload_params
+      params.require(:upload).permit(:filename)
+    end
 end

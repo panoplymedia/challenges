@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SalesAdmin</title>
+    <title>Sales Admin</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -14,7 +14,21 @@
 
   </head>
   <body>
-    
+
+    <div class=container>
+    <br />
+      <div class="row">
+        <div class="col-sm-4">
+
+          <a class="text-info" href='/'><h1>Sales Admin</h1></a>
+        </div>
+
+        <div class="col-sm-8">
+          <p class="text-muted"> An administrative application to manage the Acme Cult Hero Supplies sales files uploads and calculate revenue</p>
+        </div>
+      </div>
+    </div>
+
     <%= yield %>
   </body>
 </html>
