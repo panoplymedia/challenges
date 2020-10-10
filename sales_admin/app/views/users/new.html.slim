@@ -1,0 +1,31 @@
+.container
+  h1 Sign Up
+  = form_for @user do |f|
+    - if @user.errors.any?
+      .error_messages
+        h2 Form is invalid
+        ul
+          - @user.errors.full_messages.each do |message|
+            li= message
+
+    .form-group
+      .field
+        = f.label :email
+        br/
+        = f.text_field :email, class: "form-control"
+
+    .form-group
+      .field
+        = f.label :password
+        br/
+        = f.password_field :password, class: "form-control"
+
+    .form-group
+      .field
+        = f.label :password_confirmation
+        br/
+        = f.password_field :password_confirmation, class: "form-control"
+
+    .actions.row
+      .col = f.submit "Sign Up", class: "btn btn-primary"
+      .col = link_to "Log In", login_path, class: "btn btn-secondary"

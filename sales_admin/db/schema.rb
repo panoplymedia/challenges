@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_060632) do
+ActiveRecord::Schema.define(version: 2020_10_10_032804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,10 +53,20 @@ ActiveRecord::Schema.define(version: 2020_10_08_060632) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "filename"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_uploads_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "items", "merchants"
   add_foreign_key "sales", "customers"
   add_foreign_key "sales", "items"
   add_foreign_key "sales", "uploads"
+  add_foreign_key "uploads", "users"
 end

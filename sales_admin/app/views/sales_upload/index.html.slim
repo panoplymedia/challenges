@@ -19,7 +19,7 @@ ruby:
                 th File
                 th Time
                 th Revenue
-                th
+                th User
 
 
             -uploads.each do |upload|
@@ -38,7 +38,7 @@ ruby:
                       strong = link_to "#{upload.filename}", upload_overview_path(upload.id), class: 'text-info text-strong'
                     td.text-muted = upload.created_at.strftime("%d/%m/%Y %I:%M %p")
                     td.text-success = number_to_currency(upload.total_revenue)
-                    td
+                    td.text-muted = upload.user_email
                       /p= link_to 'Destroy', upload, data: { confirm: 'Are you sure?' }, method: :delete
 
 

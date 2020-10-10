@@ -1,0 +1,20 @@
+
+.container
+  h1 Log In
+  = form_tag sessions_path do
+
+    .form-group
+      .field
+        = label_tag :email
+        br/
+        = text_field_tag :email, params[:email], class: "form-control"
+
+    .form-group
+      .field
+        = label_tag :password
+        br/
+        = password_field_tag :password, "", class: "form-control"
+
+    .actions.row
+      .col = submit_tag "Log In", class: "btn btn-primary"
+      .col = link_to "Sign Up", signup_path, class: "btn btn-secondary"

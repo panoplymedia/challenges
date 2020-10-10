@@ -12,7 +12,7 @@ class SalesUploadController < ApplicationController
 
     ActiveRecord::Base.transaction do
 
-      db_upload = Upload.create! filename: csv.original_filename
+      db_upload = Upload.create! filename: csv.original_filename, user_id: current_user.id
 
       table.each do |sale|
 
@@ -25,10 +25,9 @@ class SalesUploadController < ApplicationController
         sale = Sale.find_or_create_by(quantity: sale['Quantity'], customer: customer, item: item, upload: db_upload)
       end
 
-      # puts "Sales: #{db_upload.total_revenue}"
     end
 
-    redirect_to root_path
+    redirect_to root_path, notice: "Sales data uploaded successfully!"
   end
 
   def overview
