@@ -1,0 +1,65 @@
+ruby:
+  uploads = Upload.last(7)
+
+.container
+  .row
+    .col-md-12
+
+      br
+
+      -if uploads.size > 0
+        h4 Recent Uploads
+
+        .uploads-body
+          table.table.table-hover.shadow
+
+            thead
+              tr.bg-info
+                th
+                th File
+                th Time
+                th Revenue
+                th User
+
+
+            -uploads.each do |upload|
+
+                tbody.user-info id="uid-#{upload.id}"
+                  tr
+                    td
+                      svg.feather.feather-file-text fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="24" xmlns="http://www.w3.org/2000/svg"
+                        path d=("M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z")
+                        polyline points=("14 2 14 8 20 8")
+                        line x1="16" x2="8" y1="13" y2="13"
+                        line x1="16" x2="8" y1="17" y2="17"
+                        polyline points=("10 9 9 9 8 9")
+
+                    td
+                      strong = link_to "#{upload.filename}", upload_overview_path(upload.id), class: 'text-info text-strong'
+                    td.text-muted = upload.created_at.strftime("%d/%m/%Y %I:%M %p")
+                    td.text-success = number_to_currency(upload.total_revenue)
+                    td.text-muted = upload.user_email
+                      /p= link_to 'Destroy', upload, data: { confirm: 'Are you sure?' }, method: :delete
+
+
+  /! Trigger the modal with a button
+  button.btn.btn-info.btn-lg data-target="#uploadModal" data-toggle="modal" type="button"  Upload File
+  /! Modal
+  #uploadModal.modal.fade aria-hidden="true" role="dialog" tabindex="-1"
+    .modal-dialog role="document"
+      .modal-content
+        .modal-header
+          h5#uploadModalLabel.modal-title Upload
+          button.close data-dismiss="modal" type="button"
+            span aria-hidden="true" &times;
+        .modal-body
+          = form_tag(upload_csv_path, id: "upload-sales-form", remote: true, multipart: true) do
+            .row
+              .col-md-12
+                .form-group
+                  = label_tag :csv, 'Upload CSV: '
+                  = file_field_tag :csv
+            .row
+              .col-md-1
+                .form-group
+                  = button_tag "Upload", class: "btn btn-primary", aria: { controls: :filename }, tabindex: 1
